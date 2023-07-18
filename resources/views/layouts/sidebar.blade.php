@@ -9,8 +9,8 @@
 
                     <span class="ml-3">Dashboard</span>
                 </x-sidebar-link>
-                </a>
             </li>
+            @canany(['admin'])
             <li>
                 <x-sidebar-link :href="route('staff')" :active="request()->routeIs('staff')">
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
@@ -19,8 +19,9 @@
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Staff</span>
                 </x-sidebar-link>
-                </a>
             </li>
+            @endcan
+            @canany(['admin', 'staff'])
             <li>
                 <x-sidebar-link :href="route('anggota')" :active="request()->routeIs('anggota')">
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
@@ -29,8 +30,9 @@
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Anggota</span>
                 </x-sidebar-link>
-                </a>
             </li>
+            @endcanany
+            @canany(['admin'])
             <li>
                 <x-sidebar-link :href="route('tipe-sampah')" :active="request()->routeIs('tipe-sampah')">
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"  aria-hidden="true" class="bac nx rz um">
@@ -39,8 +41,9 @@
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Tipe Sampah</span>
                 </x-sidebar-link>
-                </a>
             </li>
+            @endcanany
+            @canany(['admin', 'staff'])
             <li>
                 <x-sidebar-link :href="route('setor-sampah')" :active="request()->routeIs('setor-sampah')">
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
@@ -49,8 +52,19 @@
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Setor Sampah</span>
                 </x-sidebar-link>
-                </a>
             </li>
+            @endcanany
+            @canany(['admin', 'staff'])
+            <li>
+                <x-sidebar-link :href="route('request-tarik-dana')" :active="request()->routeIs('request-tarik-dana')">
+                    <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
+                        <path d="M3 8C2.45 8 2 7.55 2 7S2.45 6 3 6H5.54C5.19 6.6 5 7.29 5 8H3M5 13H2C1.45 13 1 12.55 1 12S1.45 11 2 11H5V13M1 18C.448 18 0 17.55 0 17S.448 16 1 16H5C5 16.71 5.19 17.4 5.54 18H1M21 6H9C7.89 6 7 6.89 7 8V16C7 17.11 7.89 18 9 18H21C22.11 18 23 17.11 23 16V8C23 6.89 22.11 6 21 6M21 12H9V9H21V12Z" />
+                    </svg>
+
+                    <span class="flex-1 ml-3 whitespace-nowrap">Request Tarik Dana</span>
+                </x-sidebar-link>
+            </li>
+            @endcanany
             <li>
                 <x-sidebar-link :href="route('histori-transaksi')" :active="request()->routeIs('histori-transaksi')">
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" class="bac nx rz um">
@@ -59,7 +73,6 @@
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Histori Transaksi</span>
                 </x-sidebar-link>
-                </a>
             </li>
         </ul>
     </div>

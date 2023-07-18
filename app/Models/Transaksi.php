@@ -24,6 +24,6 @@ class Transaksi extends Model
     }
 
     public function TipeSampah() : BelongsToMany {
-        return $this->belongsToMany(Sampah::class, 'transaksi_sampah', 'transaksi_id', 'tipe_sampah_id')->using(TransaksiSampah::class)->withPivot('timbangan', 'harga');
+        return $this->belongsToMany(Sampah::class, 'transaksi_sampah', 'transaksi_id', 'tipe_sampah_id')->withPivot('timbangan', 'harga');
     }
 }

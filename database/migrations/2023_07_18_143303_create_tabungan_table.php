@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tabungan', function (Blueprint $table) {
             $table->id();
-            $table->int('anggota_id');
-            $table->int('jumlah_uang');
+            $table->unsignedBigInteger('anggota_id');
+            $table->integer('jumlah_uang');
             $table->timestamps();
 
             $table->foreign('anggota_id')->references('id')->on('anggota');

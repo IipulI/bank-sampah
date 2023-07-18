@@ -17,7 +17,7 @@
                                     </div>
 
                                     <div class="w-full">
-                                        <div @click.away="close()" class="my-2 p-1 bg-white flex border border-gray-200 rounded">
+                                        <div @click.away="close()" class="my-2 p-1 bg-white flex border border-gray-200 rounded shadow-md">
                                             <input
                                                 x-model="filter"
                                                 @input="searchRelatedData"
@@ -25,7 +25,7 @@
                                                 @keydown.enter.stop.prevent="selectOption()"
                                                 @keydown.arrow-up.prevent="focusPrevOption()"
                                                 @keydown.arrow-down.prevent="focusNextOption()"
-                                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800">
+                                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800" placeholder="ketik nama anggota">
                                         </div>
                                     </div>
 
@@ -203,32 +203,10 @@
                 document.getElementById('satuan-' + this.rowItemId).classList.remove('bg-gray-100')
                 document.getElementById('satuan-' + this.rowItemId).removeAttribute('disabled')
 
-                this.close()
+                const satuanTeks = document.getElementById('satuan-text-' + this.rowItemId)
+                satuanTeks.innerText = this.filteredData[index].satuan
 
-                // console.log('---')
-                // console.log(key)
-                // console.log(index)
-                // console.log(this.fields)
-                // console.log('---')
-                //
-                // console.log('***')
-                // console.log(document.getElementById('satuan-' + key + 1))
-                // console.log('***')
-                //
-                // const elemement = document.getElementById('item-id-' + this.rowItemId)
-                // const satuanTeks = document.getElementById('satuan-text-' + this.rowItemId)
-                // satuanTeks.innerText = this.filteredData[index].satuan
-                //
-                //
-                //
-                // id = this.fields[key].item
-                // resp = this.getDetailSampah(id)
-                // resp.then((data) => {
-                //     document.getElementById('harga-satuan-text-'+ this.rowItemId).innerText = 'Harga satuan : ' + data.harga_satuan
-                // })
-                //
-                // this.selected = this.filteredData[index]
-                // this.close()
+                this.close()
             },
 
             calculateHarga(){

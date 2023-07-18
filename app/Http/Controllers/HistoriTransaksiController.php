@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -10,21 +11,33 @@ class HistoriTransaksiController extends Controller
 {
     public function getData(Request $request){
         $search = $request->input('search');
-        $filterDate = $request->input('filter-date');
+        $dateStart = $request->input('date-start');
+        $dateEnd = $request->input('date-end');
+        $filter = $request->input('type');
 
         $transaksi = Transaksi::query()
-            ->whereHas('tipeSampah')
             ->with('anggota')
             ->with('staff')
+//            ->has('tipeSampah')
             ->when($search != null, function (Builder $query) use ($search) {
                 $query->where('kode_transaksi', 'like', '%'.$search.'%');
                 $query->orWhereHas('anggota', function (Builder $query) use($search){
-                   $query->where('nama', 'like', '%'.$search.'%');
+                    $query->where('nama', 'like', '%'.$search.'%');
                 });
             })
-            ->when($filterDate != null, function (Builder $query) use ($filterDate) {
-                $query->orderBy('tanggal_transaksi', $filterDate);
+            ->when($dateStart != null, function (Builder $query) use ($dateStart) {
+                $query->where('tanggal_transaksi', '>=', Carbon::parse($dateStart));
+
             })
+            ->when($dateEnd != null, function (Builder $query) use ($dateEnd) {
+                $query->where('tanggal_transaksi', '<=', Carbon::parse($dateEnd));
+
+            })
+            ->when($filter != null, function (Builder $query) use ($filter) {
+                $query->where('arus_transaksi', $filter);
+
+            })
+//            ->has('tipeSampah')
             ->orderBy('tanggal_transaksi', 'desc')
             ->paginate(10);
 

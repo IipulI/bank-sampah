@@ -26,52 +26,61 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    Route::prefix('staff')->controller(StaffController::class)->group(function (){
-        Route::get('/', function () {
-            return view('app.staff');
-        })->name('staff');
+    Route::middleware('can:admin,staff')->group(function (){
+        Route::prefix('anggota')->controller(AnggotaConroller::class)->group(function(){
+            Route::get('/', function () {
+                return view('app.anggota');
+            })->name('anggota');
 
-        Route::get('/data', 'getData');
-        Route::post('edit-data', 'editData')->name('staff.edit-data');
-        Route::post('submit-data', 'submitData')->name('staff.submit-data');
+            Route::get('data', 'getData');
+            Route::post('edit-data', 'editData')->name('anggota.edit-data');
+            Route::post('submit-data', 'submitData')->name('anggota.submit-data');
+        });
+
+        Route::prefix('setor-sampah')->controller(SampahController::class)->group(function() {
+            Route::get('/', function () {
+                return view('app.setor-barang');
+            })->name('setor-sampah');
+
+            Route::get('data', 'getSampah');
+            Route::get('member', 'getMember');
+            Route::get('search', 'searchSampah');
+            Route::post('submit-data', 'setorSampah')->name('setor-sampah.submit-data');
+        });
+
+        Route::prefix('request-tarik-dana')->group(function (){
+            Route::get('/', function (){
+                return view('app.request-tarik-dana');
+            })->name('request-tarik-dana');
+
+            Route::post('submit', [SampahController::class, 'tarikDana']);
+        });
     });
 
-    Route::prefix('anggota')->controller(AnggotaConroller::class)->group(function(){
-        Route::get('/', function () {
-            return view('app.anggota');
-        })->name('anggota');
+    Route::middleware('can:admin')->group(function (){
+        Route::prefix('staff')->controller(StaffController::class)->group(function (){
+            Route::get('/', function () {
+                return view('app.staff');
+            })->name('staff');
 
-        Route::get('data', 'getData');
-        Route::post('edit-data', 'editData')->name('anggota.edit-data');
-        Route::post('submit-data', 'submitData')->name('anggota.submit-data');
+            Route::get('/data', 'getData');
+            Route::post('edit-data', 'editData')->name('staff.edit-data');
+            Route::post('submit-data', 'submitData')->name('staff.submit-data');
+        });
+
+        Route::prefix('tipe-sampah')->controller(SampahController::class)->group(function (){
+            Route::get('/', function () {
+                return view('app.tipe-sampah');
+            })->name('tipe-sampah');
+
+            Route::get('data', 'getData');
+            Route::post('edit-data', 'editData')->name('tipe-sampah.edit-data');
+            Route::post('submit-data', 'submitData')->name('tipe-sampah.submit-data');
+        });
     });
-
-
-    Route::prefix('tipe-sampah')->controller(SampahController::class)->group(function (){
-        Route::get('/', function () {
-            return view('app.tipe-sampah');
-        })->name('tipe-sampah');
-
-        Route::get('data', 'getData');
-        Route::post('edit-data', 'editData')->name('tipe-sampah.edit-data');
-        Route::post('submit-data', 'submitData')->name('tipe-sampah.submit-data');
-    });
-
-
-    Route::prefix('setor-sampah')->group(function() {
-        Route::get('/', function () {
-            return view('app.setor-barang');
-        })->name('setor-sampah');
-
-        Route::get('data', [SampahController::class, 'getSampah']);
-        Route::get('member', [SampahController::class, 'getMember']);
-        Route::get('search', [SampahController::class, 'searchSampah']);
-        Route::post('submit-data', [SampahController::class, 'setorSampah'])->name('setor-sampah.submit-data');
-    });
-
 
     Route::prefix('histori-transaksi')->controller(HistoriTransaksiController::class)->group(function (){
-        Route::get('/histori-transaksi', function () {
+        Route::get('/', function () {
             return view('app.histori-transaksi');
         })->name('histori-transaksi');
 

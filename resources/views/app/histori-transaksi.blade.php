@@ -5,7 +5,44 @@
             <!-- Content -->
             <div x-data="listSampah" class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <!-- Head Table -->
-                <div class="flex items-center justify-end px-4 py-4 bg-white dark:bg-gray-800">
+                <div class="flex items-center justify-between px-4 py-4 bg-white dark:bg-gray-800">
+
+                    <!-- Filter -->
+                    <div>
+                        <select id="filter-type" x-on:input="filterType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected disabled value="">Arus Transaksi</option>
+                            <option value="masuk">Masuk</option>
+                            <option value="keluar">Keluar</option>
+                        </select>
+                    </div>
+
+                    <!-- Datepicker -->
+                    <div id="dateRangePickerId" class="flex items-center">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <label for="date-start" class="text-sm font-semibold hidden">Date start</label>
+                            <input id="date-start" name="date-start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pilih tanggal awalan">
+                        </div>
+                        <span class="mx-4 text-gray-500">to</span>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <label for="date-end" class="text-sm font-semibold hidden">Date end</label>
+                            <input id="date-end" name="date-end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Pilih tanggal akhiran">
+                        </div>
+                        <div class="relative">
+                            <button x-on:click="filterDate"
+                                class="bg-blue-500 px-4 py-2 ml-2 rounded-md shadow-md text-sm font-semibold text-white focus:outline-none hover:bg-blue-600 focus:bg-blue-600 focus:ring-offset-1 focus:ring-2 focus:ring-blue-500">Filter</button>
+                        </div>
+                    </div>
+
                     <!-- Search Item -->
                     <div class="text-sm w-2/6">
                         <label for="search-input" class="sr-only">Search</label>
@@ -17,7 +54,7 @@
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                                 </svg>
                             </div>
-                            <button id="search-submit" x-on:click="searchSubmit" type="submit" class="py-2 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 transition-all text-sm">Search</button>
+                            <button id="search-submit" x-on:click="searchSubmit" type="submit" class="py-2 px-4 inline-flex flex-shrink-0 justify-center items-center rounded-r-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:z-10 focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:bg-blue-600 transition-all text-sm">Search</button>
                         </div>
                     </div>
                 </div>
@@ -35,6 +72,9 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Tanngal Transaksi
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Arus Transaksi
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Jumlah Uang
@@ -57,8 +97,18 @@
                                     <td>
                                         <div class="mx-4 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
                                     </td>
+                                    <td>
+                                        <div class="mx-4 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
+                                    </td>
                                 </tr>
                             </template>
+                        </template>
+                        <template x-if="items?.length === 0">
+                            <tr aria-label="table-row" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td class="px-6 py-4 text-gray-900 font-semibold text-lg text-center" colspan="4">
+                                    Data tidak ditemukan
+                                </td>
+                            </tr>
                         </template>
                         <template x-for="transaksi in items" x-cloak>
                             <tr aria-label="table-row" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -68,14 +118,10 @@
                                         <div class="text-base font-semibold" x-text="transaksi?.anggota?.nama"></div>
                                     </div>
                                 </th>
-                                <td class="px-6 py-4" x-text="transaksi.kode_transaksi">
-
-                                </td>
-                                <td class="px-6 py-4" x-text="transaksi.tanggal_transaksi">
-
-                                </td>
-                                <td class="px-6 py-4" x-text="transaksi.jumlah_uang">
-                                </td>
+                                <td class="px-6 py-4" x-text="transaksi.kode_transaksi"></td>
+                                <td class="px-6 py-4" x-text="transaksi.tanggal_transaksi"></td>
+                                <td class="px-6 py-4" x-text="transaksi.arus_transaksi"></td>
+                                <td class="px-6 py-4" x-text="transaksi.jumlah_uang"></td>
                             </tr>
                         </template>
                         </tbody>
@@ -88,7 +134,7 @@
                                 <div class=" flex w-0 flex-1">
                                     <button id="previous" @click="previousPage" class="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 pb-2 text-sm font-medium text-gray-600 hover:text-gray-400 hover:border-gray-400">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="mr-3 h-5 w-5 text-gray-600">
-                                            <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd"></path>
+                                            <path fill-rule="evenodd" d="M18 10a.75.75 0 01-.75.75H4.66l2.1 1.95a.75.75 0 11-1.02 1.1l-3.5-3.25a.75.75 0 010-1.1l3.5-3.25a.75.75 0 111.02 1.1l-2.1 1.95h12.59A.75.75 0 0118 10z" clip-rule="evenodd"></path><q></q>
                                         </svg>Previous
                                     </button>
                                 </div>
@@ -180,28 +226,121 @@
                 })
             },
 
-            async searchSubmit(e){
-                this.navItems = null
-                this.items = null
-                this.lastPage = null
-                this.curPage = 1
+            async filterType(){
+                const elemType = document.getElementById('filter-type')
 
-                const input = document.getElementById('search-input')
-                const value = input.value
+                if(elemType.value !== '' || elemType.value !== null){
+                    this.navItems = null
+                    this.items = null
+                    this.lastPage = null
+                    this.curPage = 1
 
-                let resp = await fetch('http://localhost:8080/histori-transaksi/data?search=' + value);
-                const listItems = await resp.json();
+                    const elemSearch = document.getElementById('search-input')
+                    const elemDateStart = document.getElementById('date-start')
+                    const elemDateEnd = document.getElementById('date-end')
 
-                this.lastPage = listItems.last_page
-                this.items = listItems.data
+                    let search = elemSearch.value !== '' ? 'search=' + elemSearch.value : ''
 
-                this.updateNavItem(1)
+                    let filterDate = ''
+                    if (elemDateEnd.value !== '' || elemDateStart.value !== ''){
+                        filterDate = search === ''
+                            ? 'date-start=' + elemDateStart.value + '&date-end=' + elemDateEnd.value
+                            : '&date-start=' + elemDateStart.value + '&date-end=' + elemDateEnd.value
+                    }
+
+                    let filterType = search === '' && filterDate === ''
+                        ? 'type=' + elemType.value
+                        : '&type=' + elemType.value
+
+
+                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + search + filterDate + filterType)
+                    let response = await resp.json()
+
+                    this.lastPage = response.last_page
+                    this.items = response.data
+
+                    this.updateNavItem(1)
+                }
+            },
+
+            async searchSubmit(){
+                const elemSearch = document.getElementById('search-input')
+
+                if(elemSearch.value !== ''){
+                    this.navItems = null
+                    this.items = null
+                    this.lastPage = null
+                    this.curPage = 1
+
+                    const elemType = document.getElementById('filter-type')
+                    const elemDateStart = document.getElementById('date-start')
+                    const elemDateEnd = document.getElementById('date-end')
+
+                    let search = elemSearch.value !== '' ? 'search=' + elemSearch.value : ''
+
+                    let filterDate = ''
+                    if (elemDateEnd.value !== '' || elemDateStart.value !== ''){
+                        filterDate = search === ''
+                            ? 'date-start=' + elemDateStart.value + '&date-end=' + elemDateEnd.value
+                            : '&date-start=' + elemDateStart.value + '&date-end=' + elemDateEnd.value
+                    }
+
+                    let filterType = search === '' && filterDate === ''
+                        ? 'type=' + elemType.value
+                        : '&type=' + elemType.value
+
+
+                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + search + filterDate + filterType)
+                    let response = await resp.json()
+
+                    this.lastPage = response.last_page
+                    this.items = response.data
+
+                    this.updateNavItem(1)
+                }
+            },
+
+            async filterDate(){
+                const elemDateStart = document.getElementById('date-start')
+                const elemDateEnd = document.getElementById('date-end')
+
+                if (elemDateStart.value !== '' || elemDateEnd.value !== ''){
+                    this.navItems = null
+                    this.items = null
+                    this.lastPage = null
+                    this.curPage = 1
+
+                    const elemSearch = document.getElementById('search-input')
+                    const elemType = document.getElementById('filter-type')
+
+                    let search = elemSearch.value !== '' ? 'search=' + elemSearch.value : ''
+
+                    let filterDate = ''
+                    if (elemDateEnd.value !== '' || elemDateStart.value !== ''){
+                        filterDate = search === ''
+                            ? 'date-start=' + elemDateStart.value + '&date-end=' + elemDateEnd.value
+                            : '&date-start=' + elemDateStart.value + '&date-end=' + elemDateEnd.value
+                    }
+
+                    let filterType = search === '' && filterDate === ''
+                        ? 'type=' + elemType.value
+                        : '&type=' + elemType.value
+
+
+                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + search + filterDate + filterType)
+                    let response = await resp.json()
+
+                    this.lastPage = response.last_page
+                    this.items = response.data
+
+                    this.updateNavItem(1)
+                }
             },
 
             nextPage(e){
                 const value = Number(e.target.getAttribute('value'))
 
-                if (this.curPage !== value){
+                if (this.curPage !== value && this.lastPage !== 1){
                     this.items = null;
 
                     this.navigationTable(value)
@@ -285,7 +424,16 @@
                 const search = document.getElementById('search-input')
                 const searchValue = search.value !== '' ? '&search=' + search.value : ''
 
-                let resp = await fetch('http://localhost:8080/histori-transaksi/data?page=' + value + searchValue )
+
+                const dateStart = document.getElementById('date-start')
+                const dateEnd = document.getElementById('date-end')
+                const filterDateStart = dateStart.value !== '' ? '&date-start=' + dateStart.value : ''
+                const filterDateEnd = dateEnd.value !== '' ? '&date-end=' + dateEnd.value : ''
+                const filter = filterDateStart + filterDateEnd
+                const filterDate = filter !== '' ? filter : ''
+
+
+                let resp = await fetch('http://localhost:8080/histori-transaksi/data?page=' + value + searchValue + filterDate )
                 const listItems = await resp.json();
                 const nextButton = document.getElementById('next')
 
@@ -304,8 +452,6 @@
             },
 
             updateNavItem(value){
-                console.log(this.navItems)
-
                 let wahey = [];
                 id=1;
                 itemPage = 1;
@@ -396,3 +542,4 @@
         overlay.addEventListener('click', toggleModal(modalId))
     }
 </script>
+@vite(['resources\js\datepick.js'])
