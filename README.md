@@ -15,7 +15,7 @@ Aplikasi ini dibuat untuk memenuhi tugas akhir mata kuliah basis data
 
 - Clone package menggunakan git
   ```bash
-  git clone https://github.com/IipulI/validasi-ijazah.git 
+  git clone https://github.com/IipulI/bank-sampah
   ```
 - Buka folder project
 - Jalankan perintah
