@@ -36,5 +36,6 @@
         </div>
 
         @vite(['resources/js/app.js'])
+        @yield("javascript's")
     </body>
 </html>
