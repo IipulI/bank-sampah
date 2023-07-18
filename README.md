@@ -36,9 +36,9 @@ Aplikasi ini dibuat untuk memenuhi tugas akhir mata kuliah basis data
   ```
 - Jalankan perintah untuk menjalankan webserver pada laptop
   ```bash
-  php artisan serve --port=8000
+  php artisan serve --port=8080
   ```
 - Buka Browser, lalu pada alamat url browser buka
   ```
-  localhost:8000
+  localhost:8080
   ```
