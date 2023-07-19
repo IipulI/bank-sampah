@@ -18,6 +18,7 @@ Aplikasi ini dibuat untuk memenuhi tugas akhir mata kuliah basis data
   git clone https://github.com/IipulI/bank-sampah
   ```
 - Buka folder project
+- Di dalam folder project buka cmd  
 - Jalankan perintah
   ```bash
   composer install
@@ -32,7 +33,7 @@ Aplikasi ini dibuat untuk memenuhi tugas akhir mata kuliah basis data
   ```
 - Jalankan perintah untuk membuat data admin
   ```bash
-  Php artisan db:seed
+  Php artisan db:seed --class=AdminSeeder
   ```
 - Jalankan perintah untuk menjalankan webserver pada laptop
   ```bash
