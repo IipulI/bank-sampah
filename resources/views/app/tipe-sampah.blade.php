@@ -70,6 +70,13 @@
                                     </tr>
                                 </template>
                             </template>
+                            <template x-if="items?.length === 0">
+                                <tr aria-label="table-row" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="px-6 py-4 text-gray-900 font-semibold text-lg text-center" colspan="5">
+                                        Data tidak ditemukan
+                                    </td>
+                                </tr>
+                            </template>
                             <template x-for="sampah in items" x-cloak>
                                 <tr aria-label="table-row" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                     :class="!items ? 'hidden' : ''">
