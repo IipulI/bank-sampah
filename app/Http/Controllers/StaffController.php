@@ -31,11 +31,13 @@ class StaffController extends Controller
             $anggota = User::create([
                 'name' => $request->input('nama'),
                 'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password'))
+                'password' => Hash::make($request->input('password')),
+                'role' => 'staff'
             ]);
 
             $anggota->staff()->create([
                 'nama' => $request->input('nama'),
+                'role' => 'staff'
             ]);
 
             DB::commit();

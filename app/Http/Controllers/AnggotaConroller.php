@@ -34,7 +34,8 @@ class AnggotaConroller extends Controller
             $anggota = User::create([
                 'name' => $request->input('nama'),
                 'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password'))
+                'password' => Hash::make($request->input('password')),
+                'role' => 'member'
             ]);
 
             $anggota->anggota()->create([
