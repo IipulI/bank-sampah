@@ -19,6 +19,7 @@
             </div>
 
             <div class="py-4 flex gap-x-2">
+                @canany(['admin', 'staff'])
                 <div class="flex flex-col gap-y-4 w-1/4">
                     <div class="bg-white rounded-lg shadow-md ">
                         <div class="px-4 py-4">
@@ -60,7 +61,9 @@
                         </div>
                     </div>
                 </div>
+                @endcanany
 
+                @canany(['admin', 'staff'])
                 <div class="flex flex-col gap-y-4 w-1/4">
                     <div class="bg-white rounded-lg shadow-md">
                         <div class="px-4 py-4">
@@ -103,6 +106,7 @@
                         </div>
                     </div>
                 </div>
+                @endcanany
 
                 <div class="bg-white rounded-lg shadow-md w-1/2">
                     <div class="px-4 py-4">

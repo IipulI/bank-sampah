@@ -26,7 +26,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    Route::middleware('can:admin,staff')->group(function (){
+    Route::middleware('can:admin')->middleware('can:staff')->group(function (){
         Route::prefix('anggota')->controller(AnggotaConroller::class)->group(function(){
             Route::get('/', function () {
                 return view('app.anggota');
