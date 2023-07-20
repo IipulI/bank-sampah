@@ -88,18 +88,19 @@
                                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="pl-3">
                                         <div class="text-base font-semibold" x-text="anggota.nama">Neil Sims</div>
-                                        <div class="font-normal text-gray-500" x-text="anggota.user.email">neil.sims@flowbite.com</div>
+                                        <div class="font-normal text-gray-500" x-text="anggota?.user?.email">neil.sims@flowbite.com</div>
                                     </div>
                                 </th>
                                 <td class="px-6 py-4" x-text="anggota.no_nik">
                                 </td>
-                                <td class="px-6 py-4" x-text="anggota.alamat">
+                                <td class="px-6 py-4 max-w-md text-ellipsis overflow-hidden" x-text="anggota.alamat">
                                 </td>
                                 <td class="px-6 py-4" x-text="anggota.nomor_telepon">
                                 </td>
                                 <td class="px-6 py-4">
                                     <!-- Modal toggle -->
-                                    <button href="#" @click="selectItem" onclick="toggleModal('edit-anggota-modal')" :id="anggota.id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                                    <button href="#" @click="selectItem" onclick="toggleModal('edit-anggota-modal')" :id="anggota.id" class="mr-1 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                                    <button href="#" @click="detailAnggota" :id="'detail-' + anggota.id" class="mx-1 font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</button>
                                 </td>
                             </tr>
                         </template>
@@ -236,21 +237,21 @@
                 }
 
                 var wahey = [];
+                var m = 1;
+                var n = 0;
                 if (this.lastPage <= 5){
-                    var m = 1;
-                    for (var n=0; n < this.lastPage; n++){
+                    for (n; n < this.lastPage; n++){
                         wahey[n] = { 'id': "page-"+m, 'value': m, 'text': m}
                         m++
                     }
                 }
                 if(this.lastPage > 5){
-                    var m = 1;
-                    for (var n=0; n < 3; n++){
+                    for (n; n < 3; n++){
                         wahey[n] = { 'id': 'page-'+m, 'value':m, 'text':m }
                         m++
                     }
 
-                    if (m == 4){
+                    if (m === 4){
                         wahey[n] = {'id' : 'page-'+m,  'value':'...', 'text':'...'}
                         m++
                         n++
@@ -266,9 +267,17 @@
                 const tag = document.getElementById('search-input')
 
                 tag.addEventListener('input', function (){
-                    tag.value = tag.value
                     tag.setAttribute('value', tag.value)
                 })
+            },
+
+            detailAnggota(e){
+                const elem = e.target
+                const oid = elem.getAttribute('id')
+                const id = Number(oid.slice(7))
+
+                let searchedItem = this.items.find(o => o.id === id);
+                window.location.href = "http://localhost:8080/anggota/detail?nik=" + searchedItem.no_nik;
             },
 
             async searchSubmit(e){
@@ -292,7 +301,7 @@
             nextPage(e){
                 const value = Number(e.target.getAttribute('value'))
 
-                if (this.curPage != value){
+                if (this.curPage !== value){
                     this.items = null;
 
                     this.navigationTable(value)
@@ -306,7 +315,7 @@
             previousPage(e){
                 const value = Number(e.target.getAttribute('value'))
 
-                if (this.curPage != value){
+                if (this.curPage !== value){
                     this.items = null;
 
                     this.navigationTable(value)
@@ -322,7 +331,7 @@
                 var tag     = document.getElementById(oid)
                 const type  = e.target.getAttribute('type')
 
-                if (type == 'input'){
+                if (type === 'input'){
                     tag.classList.remove('!w-16')
                     tag.autofocus = false
                     tag.value = '...'
@@ -343,13 +352,12 @@
                     tag.removeAttribute('value')
                     tag.setAttribute('type', 'input')
                     tag.addEventListener('input', function (){
-                        tag.value = tag.value
                         tag.setAttribute('value', tag.value)
                     })
                 }
 
-                if (this.curPage != value){
-                    if(Number.isInteger(value) && tag.getAttribute('type') == 'button'){
+                if (this.curPage !== value){
+                    if(Number.isInteger(value) && tag.getAttribute('type') === 'button'){
                         this.items = null
 
                         this.curPage = value
@@ -365,7 +373,7 @@
                     value = this.lastPage
                 }
 
-                if (this.curPage != value){
+                if (this.curPage !== value){
                     this.items = null
                     this.navItems = null
                     this.navigationTable(value)
@@ -375,7 +383,7 @@
 
             async navigationTable(value){
                 const search = document.getElementById('search-input')
-                const searchValue = search.value != '' ? '&search=' + search.value : ''
+                const searchValue = search.value !== '' ? '&search=' + search.value : ''
 
                 let resp = await fetch('http://localhost:8080/anggota/data?page=' + value + searchValue )
                 const listItems = await resp.json();
@@ -409,21 +417,21 @@
                     id++
                 }
                 for (var i = this.curPage - 2; i < this.curPage; i++) {
-                    if (this.curPage != i && i > 1) {
+                    if (this.curPage !== i && i > 1) {
                         itemPage++
                         wahey[id] = {'id': 'page-' + itemPage, 'value': i, 'text': i}
                         id++
                     }
                 }
 
-                if (this.curPage == value && this.curPage != 1 && this.curPage != this.lastPage) {
+                if (this.curPage === value && this.curPage !== 1 && this.curPage !== this.lastPage) {
                     itemPage++
                     wahey[id] = {'id': 'page-' + itemPage, 'value': this.curPage, 'text': this.curPage}
                     id++
                 }
 
                 for (var j = this.curPage + 1; j < this.curPage + 3; j++) {
-                    if (this.curPage != j && j < this.lastPage) {
+                    if (this.curPage !== j && j < this.lastPage) {
                         itemPage++
                         wahey[id] = {'id': 'page-' + itemPage, 'value': j, 'text': j}
                         id++;
@@ -434,7 +442,7 @@
                     wahey[id] = {'id': 'page-' + itemPage, 'value': '...', 'text': '...'}
                     id++
                 }
-                if (this.lastPage != 1) {
+                if (this.lastPage !== 1) {
                     wahey[id] = {'id': 'page-' + id, 'value': this.lastPage, 'text': this.lastPage}
                 }
 

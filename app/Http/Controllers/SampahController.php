@@ -118,21 +118,24 @@ class SampahController extends Controller
                 ->where('id', $request->input('anggota_id'))
                 ->first();
 
-            if($anggota->tabungan()->exists()){
-                $anggota->tabungan->jumlah_uang += $request->input('total_harga');
+            $tabungan = Tabungan::query()
+                ->where('anggota_id', $request->input('anggota_id'))
+                ->first();
 
-            } else{
-                $anggota->tabungan()->create([
-                    'jumlah_uang' => $request->input('total_harga')
-                ]);
+            if ($tabungan != null){
+                $tabungan->jumlah_uang = $tabungan->jumlah_uang + $request->input('total_harga');
+                $tabungan->save();
+            } else {
+                $newTab = new Tabungan();
+                $newTab->anggota_id = $request->input('anggota_id');
+                $newTab->jumlah_uang = $request->input('total_harga');
+                $newTab->save();
             }
-
-            dump($anggota->tabungan);
 
             $transaksi = Transaksi::create([
                 'staff_id' => Auth::user()->id,
                 'anggota_id' => $request->input('anggota_id'),
-                'kode_transaksi' => 'TRX-I-' . Carbon::now()->format('d-m-Y-G-i'),
+                'kode_transaksi' => 'TRX-I-' . Carbon::now()->format('d-m-Y-G-i-s-u'),
                 'jumlah_uang' => $request->total_harga,
                 'tanggal_transaksi' => Carbon::today(),
                 'arus_transaksi' => 'masuk',
@@ -179,7 +182,7 @@ class SampahController extends Controller
             $anggota->transaksi()->create([
                 'staff_id' => Auth::user()->id,
                 'jumlah_uang' => $request->input('inputTarik'),
-                'kode_transaksi' => 'TRX-O-' . Carbon::now()->format('d-m-Y-G-i'),
+                'kode_transaksi' => 'TRX-O-' . Carbon::now()->format('d-m-Y-G-i-s-u'),
                 'tanggal_transaksi' => Carbon::today(),
                 'arus_transaksi' => 'keluar'
             ]);

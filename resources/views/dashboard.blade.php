@@ -108,7 +108,7 @@
                 </div>
                 @endcanany
 
-                <div class="bg-white rounded-lg shadow-md w-1/2">
+                <div class="grow h-fit bg-white rounded-lg shadow-md w-1/2">
                     <div class="px-4 py-4">
                         <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Histori Transaksi</div>
                             <table class="px-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -117,9 +117,11 @@
                                     <th scope="col" class="px-6 py-3">
                                         Kode Transaksi
                                     </th>
+                                    @canany(['staff', 'admin'])
                                     <th scope="col" class="px-6 py-3">
                                         Nama Anggota
                                     </th>
+                                    @endcanany
                                     <th scope="col" class="px-6 py-3">
                                         Alur Transaksi
                                     </th>
@@ -129,35 +131,24 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @for($i=1; $i<7; $i++)
+                                @foreach($transaksi as $item)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                         <td class="px-6 py-4">
-                                            TRX-291-1205-2141
+                                            {{ $item->kode_transaksi }}
+                                        </td>
+                                        @canany(['staff', 'admin'])
+                                        <td class="px-6 py-4">
+                                            {{ $item->anggota->nama }}
+                                        </td>
+                                        @endcanany
+                                        <td class="px-6 py-4">
+                                            Transaksi {{ $item->arus_transaksi }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            Neil Sims
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            Transaksi Masuk
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            Rp. 120.000
+                                            Rp. {{ $item->jumlah_uang }}
                                         </td>
                                     </tr>
-                                @endfor<tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <td class="px-6 py-4">
-                                        TRX-291-1205-2141
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Neil Sims
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Transaksi Masuk
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Rp. 120.000
-                                    </td>
-                                </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>

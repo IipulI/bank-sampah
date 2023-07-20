@@ -38,9 +38,25 @@ class HistoriTransaksiController extends Controller
 
             })
 //            ->has('tipeSampah')
-            ->orderBy('tanggal_transaksi', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return $transaksi;
+    }
+
+    public function detail(Request $request){
+
+        $transaksi = Transaksi::query()
+            ->with('anggota')
+            ->with('staff')
+            ->with('tipeSampah')
+            ->where('kode_transaksi', $request->input('kode'))
+            ->first();
+
+        $data['transaksi'] = $transaksi;
+
+
+
+        return view('app.detail-transaksi', $data);
     }
 }

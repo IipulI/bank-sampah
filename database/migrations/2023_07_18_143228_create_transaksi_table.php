@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('anggota_id');
             $table->string('kode_transaksi',255);
             $table->integer('jumlah_uang');
-            $table->date('tanngal_transaksi');
+            $table->date('tanggal_transaksi');
             $table->string('arus_transaksi', 50);
             $table->timestamps();
 

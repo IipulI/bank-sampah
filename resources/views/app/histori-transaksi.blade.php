@@ -48,7 +48,14 @@
                         <label for="search-input" class="sr-only">Search</label>
                         <div class="relative flex rounded-md shadow-sm">
                             <input id="search-input" type="search"  name="query" x-on:keyup.enter="searchSubmit" x-on:input="searchInput"
-                                   class="py-2 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari nama anggota atau kode transaksi">
+                                   class="py-2 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+                                   @canany(['admin', 'staff'])
+                                   placeholder="Cari nama anggota atau kode transaksi"
+                                   @endcanany
+                                   @canany(['member'])
+                                   placeholder="Cari kode transaksi"
+                                   @endcanany
+                            >
                             <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
                                 <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -79,6 +86,9 @@
                             <th scope="col" class="px-6 py-3">
                                 Jumlah Uang
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                Action
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -100,12 +110,15 @@
                                     <td>
                                         <div class="mx-4 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
                                     </td>
+                                    <td>
+                                        <div class="mx-4 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
+                                    </td>
                                 </tr>
                             </template>
                         </template>
                         <template x-if="items?.length === 0">
                             <tr aria-label="table-row" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td class="px-6 py-4 text-gray-900 font-semibold text-lg text-center" colspan="5">
+                                <td class="px-6 py-4 text-gray-900 font-semibold text-lg text-center" colspan="6">
                                     Data tidak ditemukan
                                 </td>
                             </tr>
@@ -122,6 +135,9 @@
                                 <td class="px-6 py-4" x-text="transaksi.tanggal_transaksi"></td>
                                 <td class="px-6 py-4" x-text="transaksi.arus_transaksi"></td>
                                 <td class="px-6 py-4" x-text="transaksi.jumlah_uang"></td>
+                                <td class="px-6 py-4">
+                                    <button x-on:click="detailTransaksi" :id="'detail-' + transaksi.id" class="text-indigo-600">Detail</button>
+                                </td>
                             </tr>
                         </template>
                         </tbody>
@@ -495,14 +511,12 @@
                 this.navItems = wahey
             },
 
-            selectItem(e){
-                const id = Number(e.target.getAttribute('id'))
+            detailTransaksi(e){
+                const oid = (e.target.getAttribute('id'))
+                const id = Number(oid.slice(7))
                 let searchedItem = this.items.find(o => o.id === id);
 
-                document.getElementById('edit-id').value = searchedItem.id
-                document.getElementById('edit-nama').value = searchedItem.nama
-                document.getElementById('edit-satuan').value = searchedItem.satuan
-                document.getElementById('edit-harga').value = searchedItem.harga_satuan
+                window.location.href = "http://localhost:8080/histori-transaksi/detail?kode=" + searchedItem.kode_transaksi;
             },
         }))
     });

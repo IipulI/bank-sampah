@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder as Builders;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -81,5 +82,21 @@ class AnggotaConroller extends Controller
         return redirect('anggota')->with([
             'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
         ]);
+    }
+
+    public function detailAnggota(Request $request){
+        $anggota = Anggota::query()
+            ->with('user')
+            ->with('tabungan')
+            ->with(['transaksi' => function(Builders $query){
+                $query->orderByDesc('created_at')
+                    ->limit(5);
+            }])
+            ->where('no_nik', $request->input('nik'))
+            ->first();
+
+        $data['anggota'] = $anggota;
+
+        return view('app.detail-anggota', $data);
     }
 }

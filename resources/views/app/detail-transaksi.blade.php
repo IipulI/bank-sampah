@@ -8,82 +8,72 @@
     <div class="p-4 sm:ml-64">
         <div class="p-4 mt-14">
 
-            <div class="bg-white rounded-md shadow-md mb-4">
-                <div class="flex justify-between px-4 py-4 text-2xl font-semibold text-gray-600">
-                    <span>Jumlah Tabungan</span>
-                    <span>Rp. {{ $anggota->tabungan->jumlah_uang != null ? $anggota->tabungan->jumlah_uang : '0' }}</span>
-                </div>
-            </div>
-
             <div class="flex flex-wrap gap-x-2 gap-y-4">
                 <div class="grow bg-white rounded-lg shadow-md px-4 py-4 w-80 h-fit">
-                    <div class="text-2xl font-semibold text-gray-600 border-b-4">Profil Anggota</div>
+                    <div class="text-2xl font-semibold text-gray-600 border-b-4">Detail Transaksi</div>
                     <table class="mx-2 my-2">
                         <tr>
-                            <td class="text-left align-top pr-4">Nama</td>
+                            <td class="text-left align-top pr-4">Kode Transaksi</td>
                             <td class="align-top">:</td>
-                            <td class="px-2">{{ $anggota->nama }}</td>
+                            <td class="px-2">{{ $transaksi->kode_transaksi }}</td>
                         </tr>
                         <tr>
-                            <td class="text-left align-top pr-4">No NIK</td>
+                            <td class="text-left align-top pr-4">Nama Anggota</td>
                             <td class="align-top">:</td>
-                            <td class="px-2">{{ $anggota->no_nik }}</td>
+                            <td class="px-2">{{ $transaksi->anggota->nama }}</td>
                         </tr>
                         <tr>
-                            <td class="text-left align-top pr-4">Email</td>
+                            <td class="text-left align-top pr-4">Tanggal Transaksi</td>
                             <td class="align-top">:</td>
-                            <td class="px-2">{{ $anggota->user->email }}</td>
+                            <td class="px-2">{{ $transaksi->tanggal_transaksi }}</td>
                         </tr>
                         <tr>
-                            <td class="text-left align-top pr-4">Alamat</td>
+                            <td class="text-left align-top pr-4">Jumlah Uang</td>
                             <td class="align-top">:</td>
-                            <td class="px-2 max-w-md break-words">{{ $anggota->alamat }}</td>
+                            <td class="px-2">{{ $transaksi->jumlah_uang }}</td>
                         </tr>
                         <tr>
-                            <td class="text-left align-top pr-4">Telepon</td>
+                            <td class="text-left align-top pr-4">Arus Transaksi</td>
                             <td class="align-top">:</td>
-                            <td class="px-2">{{ $anggota->nomor_telepon }}</td>
+                            <td class="px-2 max-w-md break-words">{{ $transaksi->arus_transaksi }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-left align-top pr-4">Staff Penginput</td>
+                            <td class="align-top">:</td>
+                            <td class="px-2">{{ $transaksi->staff->nama }}</td>
                         </tr>
                     </table>
                 </div>
 
                 <div class="grow bg-white rounded-lg shadow-md w-1/2 h-fit">
                     <div class="px-4 py-4">
-                        <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Histori Transaksi</div>
+                        <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">List Barang</div>
 
                         <table class="px-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Kode Transaksi
+                                    Nama Barang
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Alur Transaksi
+                                    Timbangan
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Jumlah
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Detail
+                                    Jumlah Uang
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($anggota->transaksi as $item)
+                            @foreach($transaksi->tipeSampah as $item)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="px-6 py-4">
-                                    {{ $item->kode_transaksi }}
+                                    {{ $item->nama }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    Transaksi {{ $item->arus_transaksi }}
+                                    {{ $item->pivot->timbangan . ' ' . $item->satuan }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    Rp. {{ $item->jumlah_uang }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <a href="http://localhost:8080/histori-transaksi/detail?kode={{ $item->kode_transaksi }}" class="text-indigo-600">
-                                        Detail
-                                    </a>
+                                    Rp. {{ $item->pivot->harga }}
                                 </td>
                             </tr>
                             @endforeach

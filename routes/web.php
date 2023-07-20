@@ -26,11 +26,12 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
-    Route::middleware('can:admin')->middleware('can:staff')->group(function (){
+    Route::middleware('can:both')->group(function (){
         Route::prefix('anggota')->controller(AnggotaConroller::class)->group(function(){
             Route::get('/', function () {
                 return view('app.anggota');
             })->name('anggota');
+            Route::get('detail', 'detailAnggota');
 
             Route::get('data', 'getData');
             Route::post('edit-data', 'editData')->name('anggota.edit-data');
@@ -83,6 +84,8 @@ Route::middleware(['auth', 'verified'])->group(function(){
         Route::get('/', function () {
             return view('app.histori-transaksi');
         })->name('histori-transaksi');
+
+        Route::get('/detail', 'detail');
 
         Route::get('data', 'getData');
     });
