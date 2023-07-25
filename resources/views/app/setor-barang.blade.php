@@ -8,31 +8,31 @@
                 <div class="bg-white rounded-md shadow-md">
                     <div class="px-4 py-2">
                         <div class="flex items-center border-b-2 py-2">
-                            <div class="ml-4 font-semibold font-grey-600">Anggota</div>
+                            <div class="ml-4 font-semibold font-grey-600">Masyarakat</div>
                             <div class="mr-4 w-2/4 px-4">
                                 <div x-data="selectConfigs()" x-init="fetchOptions()" class="flex flex-col items-center relative">
                                     <div class="hidden">
                                         <label for="anggota_id">AnggotaId</label>
-                                        <input x-model="anggotaId" name="anggota_id" id="anggota_id">
+                                        <input x-model="anggotaId" name="no_nik" id="anggota_id">
                                     </div>
 
                                     <div class="w-full">
-                                        <div @click.away="close()" class="my-2 p-1 bg-white flex border border-gray-200 rounded shadow-md">
+                                        <div @click.away="close" class="my-2 p-1 bg-white flex border border-gray-200 rounded shadow-md">
                                             <input
                                                 x-model="filter"
                                                 @input="searchRelatedData"
-                                                @click="open()"
+                                                @click="open"
                                                 @keydown.enter.stop.prevent="selectOption()"
                                                 @keydown.arrow-up.prevent="focusPrevOption()"
                                                 @keydown.arrow-down.prevent="focusNextOption()"
-                                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800" placeholder="ketik nama anggota">
+                                                class="p-1 px-2 appearance-none outline-none w-full text-gray-800" placeholder="ketik nama masyarakat">
                                         </div>
                                     </div>
 
                                     <div x-show="isOpen()" class="absolute mt-14 max-h-72 shadow bg-white top-100 z-40 w-full rounded overflow-y-auto">
                                         <div class="flex flex-col w-full">
-                                            <template x-for="(option, index) in filteredOptions()" :key="index">
-                                                <div @click="onOptionClick(index)" :class="classOption(option.id, index)" :aria-selected="focusedOptionIndex === index">
+                                            <template x-for="(option, index) in filteredOptions" :key="index">
+                                                <div @click="onOptionClick(index)" :class="classOption(option.no_nik, index)" :aria-selected="focusedOptionIndex === index">
                                                     <div class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative hover:border-teal-100">
                                                         <div class="w-full items-center flex">
                                                             <div class="mx-2 -mt-1"><span x-text="option.nama"></span>
@@ -62,7 +62,7 @@
                                                            class="rounded-md border-0 mx-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                                 </td>
                                                 <td class="font-bold text-gray-900 flex-none text-center">
-                                                    <span x-text="key + 1" class="block w-8"></span>
+                                                    <div x-text="key + 1" class="block w-8 mt-[0.3rem]"></div>
                                                 </td>
                                                 <td x-data="{ id: 'barang-'+ (key+1) }">
                                                     <label :for="id" class="font-semibold text-gray-600 mx-2">Nama Barang</label>
@@ -196,7 +196,7 @@
 
                 this.fields[key].index = index
                 this.fields[key].barang = this.filteredData[index].nama
-                this.fields[key].item = this.filteredData[index].id
+                this.fields[key].item = this.filteredData[index].tipe_sampah_id
                 this.fields[key].hargaSatuan = 'Harga satuan : '+this.filteredData[index].harga_satuan
                 this.fields[key].rawHargaSatuan = +this.filteredData[index].harga_satuan
 
@@ -290,9 +290,9 @@
             },
             isOpen() { return this.show === true },
             selectedName() { return this.selected ? this.selected.nama : this.filter; },
-            selectedId() { return this.selected ? this.selected.id : this.filter },
+            selectedId() { return this.selected ? this.selected.no_nik : this.filter },
             classOption(id, index) {
-                const isSelected = this.selected ? (id == this.selected.id) : false;
+                const isSelected = this.selected ? (id == this.selected.no_nik) : false;
                 const isFocused = (index == this.focusedOptionIndex);
                 return {
                     'cursor-pointer w-full border-gray-100 border-b hover:bg-blue-50': true,
@@ -331,7 +331,7 @@
                 }
                 this.focusedOptionIndex = this.focusedOptionIndex ?? 0;
                 const selected = this.filteredOptions()[this.focusedOptionIndex]
-                if (this.selected && this.selected.id == selected.id) {
+                if (this.selected && this.selected.no_nik == selected.no_nik) {
                     this.filter = '';
                     this.selected = null;
                 }

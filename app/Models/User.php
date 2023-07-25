@@ -13,6 +13,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $primaryKey = 'user_id';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -45,10 +48,10 @@ class User extends Authenticatable
     ];
 
     public function anggota() : HasOne{
-        return $this->hasOne(Anggota::class);
+        return $this->hasOne(Masyarakat::class, 'user_id', 'user_id');
     }
 
     public function staff() : HasOne{
-        return $this->hasOne(Staff::class);
+        return $this->hasOne(Staff::class, 'user_id', 'user_id');
     }
 }

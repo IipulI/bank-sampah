@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Anggota;
+use App\Models\Masyarakat;
 use App\Models\Sampah;
 use App\Models\Staff;
 use App\Models\Transaksi;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
     public function index(){
-        $anggota = Anggota::query()->count();
+        $anggota = Masyarakat::query()->count();
         $staff = Staff::query()->count();
         $tipeSampah = Sampah::query()->count();
         $sampahMasuk = TransaksiSampah::query()->count();
@@ -26,21 +26,21 @@ class HomeController extends Controller
             $saldoKas = Transaksi::query()->where('arus_transaksi', 'masuk')->sum('jumlah_uang') - Transaksi::query()->where('arus_transaksi', 'keluar')->sum('jumlah_uang');
 
             $transaksi = Transaksi::query()
-                ->with('anggota')
+                ->with('masyarakat')
                 ->orderByDesc('created_at')
                 ->limit(7)
                 ->get();
         } else {
-            $user = Anggota::query()
+            $user = Masyarakat::query()
                 ->with('tabungan')
                 ->with('transaksi')
-                ->where('user_id', Auth::user()->id)
+                ->where('user_id', Auth::id())
                 ->first();
 
             $saldoKas = $user->tabungan()->exists() ? $user->tabungan->jumlah_uang : '0' ;
             $transaksi = Transaksi::query()
-                ->where('anggota_id', $user->id)
-                ->with('anggota')
+                ->where('no_nik', $user->no_nik)
+                ->with('masyarakat')
                 ->orderByDesc('created_at')
                 ->limit(7)
                 ->get();

@@ -13,14 +13,15 @@ class Transaksi extends Model
 
     protected $table = 'transaksi';
 
-    protected $guarded = ['id'];
+    protected $guarded = ['transaksi_id'];
+    protected $primaryKey = 'transaksi_id';
 
-    public function anggota() : BelongsTo {
-        return $this->belongsTo(Anggota::class);
+    public function masyarakat() : BelongsTo {
+        return $this->belongsTo(Masyarakat::class, 'no_nik', 'no_nik');
     }
 
     public function staff() : BelongsTo {
-        return $this->belongsTo(Staff::class);
+        return $this->belongsTo(Staff::class, 'staff_id', 'staff_id');
     }
 
     public function TipeSampah() : BelongsToMany {

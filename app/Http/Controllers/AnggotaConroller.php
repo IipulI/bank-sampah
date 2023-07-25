@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Anggota;
+use App\Models\Masyarakat;
 use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder as Builders;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,7 +16,7 @@ class AnggotaConroller extends Controller
     public function getData(Request $request){
         $search = $request->input('search');
 
-        $sampah = Anggota::query()
+        $sampah = Masyarakat::query()
             ->with('user')
             ->when($search != null, function (Builder $query) use ($search) {
                 $query->where('nama', 'like', '%'.$search.'%')
@@ -28,6 +28,43 @@ class AnggotaConroller extends Controller
     }
 
     public function submitData(Request $request){
+        $inputNIK = $request->input('no_nik');
+        $inputTelp = $request->input('nomor_telepon');
+        $inputMail = $request->input('email');
+
+        $userMail = User::query()
+            ->where('email', $inputMail)
+            ->first();
+        $masyarakatNik = Masyarakat::query()
+            ->where('no_nik', $inputNIK)
+            ->first();
+        $masyarakatTelp = Masyarakat::query()
+            ->where('nomor_telepon', $inputTelp)
+            ->first();
+
+        if ($userMail != null){
+            return redirect()->back()->with([
+                'type' => 'error',
+                'title' => 'Duplikasi data',
+                'message' => 'User dengan email : ' . $inputMail . ' Sudah ada, mohon ganti dengan email lain'
+            ]);
+        }
+        if ($masyarakatNik != null){
+            return redirect()->back()->with([
+                'type' => 'error',
+                'title' => 'Duplikasi data',
+                'message' => 'Masyarakat dengan NIK : ' . $inputNIK . ' Sudah ada, mohon ganti dengan NIK lain'
+            ]);
+        }
+        if ($masyarakatTelp != null){
+            return redirect()->back()->with([
+                'type' => 'error',
+                'title' => 'Duplikasi data',
+                'message' => 'Masyarakat dengan nomor telepon : ' . $inputTelp . ' Sudah ada, mohon ganti dengan nomor_telepon lain'
+            ]);
+        }
+
+
         try {
             DB::beginTransaction();
 
@@ -39,54 +76,73 @@ class AnggotaConroller extends Controller
             ]);
 
             $anggota->anggota()->create([
-                'no_nik' => $request->input('no_nik'),
+                'no_nik' => $inputNIK,
                 'nama' => $request->input('nama'),
                 'alamat' => $request->input('alamat'),
-                'nomor_telepon' => $request->input('nomor_telepon')
+                'nomor_telepon' => $inputTelp
             ]);
 
             DB::commit();
         } catch (\Exception $e){
             DB::rollBack();
 
-            return $e;
+            throw $e;
         }
 
-        return redirect('anggota')->with([
-            'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
+        return redirect('masyarakat')->with([
+            'type' => 'success',
+            'title' => 'Data berhasil ditambahkan',
+            'message' => 'Masyarakat ' . $request->input('nama') .' Berhasil ditambahkan'
         ]);
     }
 
     public function editData(Request $request){
+        $sampah = Masyarakat::query()
+            ->with('user')
+            ->where('no_nik', $request->input('id'))
+            ->first();
+        $user = User::query()
+            ->where('email', $request->input('old_email'))
+            ->first();
+
+
+        if (!$sampah || !$user){
+            return redirect('masyarakat')->with([
+                'type' => 'error',
+                'title' => 'Data tidak ditemukan',
+                'message' => 'Terjadi kesalahan perubahan data'
+            ]);
+        }
+
+
         try {
             DB::beginTransaction();
 
-            $sampah = Anggota::query()
-                ->with('user')
-                ->where('id', $request->input('id'))
-                ->firstOrFail();
-
             $sampah->nama = $request->input('nama');
-            $sampah->user->email = $request->input('email');
+            $user->email = $request->input('email');
             $sampah->no_nik = $request->input('no_nik');
             $sampah->alamat = $request->input('alamat');
             $sampah->nomor_telepon = $request->input('nomor_telepon');
+
+            $user->save();
             $sampah->save();
 
             DB::commit();
         } catch (\Exception $e){
             DB::rollBack();
 
-            return $e;
+            throw $e;
         }
 
-        return redirect('anggota')->with([
-            'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
+        return redirect('masyarakat')->with([
+            'type' => 'success',
+            'title' => 'Data berhasil dirubah',
+            'message' => 'Masyarakat ' . $request->input('nama') .' Berhasil dirubah'
         ]);
     }
 
     public function detailAnggota(Request $request){
-        $anggota = Anggota::query()
+        $anggota = Masyarakat::query()
             ->with('user')
             ->with('tabungan')
             ->with(['transaksi' => function(Builders $query){

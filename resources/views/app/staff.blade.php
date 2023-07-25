@@ -79,10 +79,10 @@
                                         <div class="text-base font-semibold" x-text="staff.nama"></div>
                                     </div>
                                 </th>
-                                <td class="px-6 py-4" x-text="staff.user.email"></td>
+                                <td class="px-6 py-4" x-text="staff?.user?.email"></td>
                                 <td class="px-6 py-4">
                                     <!-- Modal toggle -->
-                                    <button href="#" @click="selectItem" onclick="toggleModal('edit-staff-modal')" :id="staff.id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                                    <button href="#" @click="selectItem" onclick="toggleModal('edit-staff-modal')" :id="staff.staff_id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                                 </td>
                             </tr>
                         </template>
@@ -125,26 +125,61 @@
         </div>
     </div>
 
+    @if( \Illuminate\Support\Facades\Session::has('type') )
+        <x-error-modal>
+            @if(\Illuminate\Support\Facades\Session::get('type') == 'error')
+                <x-slot:color>
+                    bg-red-100
+                </x-slot:color>
+                <x-slot:colortext>
+                    text-red-600
+                </x-slot:colortext>
+                <x-slot:svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path>
+                </x-slot:svg>
+            @endif
+            @if(\Illuminate\Support\Facades\Session::get('type') == 'success')
+                <x-slot:color>
+                    bg-green-100
+                </x-slot:color>
+                <x-slot:colortext>
+                    text-green-600
+                </x-slot:colortext>
+                <x-slot:svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </x-slot:svg>
+            @endif
+
+            <x-slot:title>
+                {{ \Illuminate\Support\Facades\Session::get('title') }}
+            </x-slot:title>
+            <x-slot:message>
+                {{ \Illuminate\Support\Facades\Session::get('message') }}
+            </x-slot:message>
+        </x-error-modal>
+@endif
+
     <!-- Edit Item Sampah Modal -->
     <x-forms.input id="edit-staff-modal" route="staff.edit-data">
         <x-slot:title>
-            Edit Anggota
+            Edit Staff
         </x-slot:title>
 
-        <div>
+        <div class="hidden">
             <label for="edit-id" class="hidden">Id</label>
             <input type="text" name="id" id="edit-id" class="hidden">
 
+            <label for="edit-old-email" class="hidden">Id</label>
+            <input type="text" name="old_email" id="edit-old-email" class="hidden">
+        </div>
+
+        <div>
             <label for="edit-nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
             <input type="text" name="nama" id="edit-nama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
         </div>
         <div>
-            <label for="edit-satuan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-            <input type="text" name="satuan" id="edit-email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
-        </div>
-        <div>
-            <label for="edit-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-            <input type="password" name="password" id="edit-password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+            <label for="edit-email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+            <input type="text" name="email" id="edit-email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
         </div>
 
     </x-forms.input>
@@ -405,11 +440,12 @@
 
             selectItem(e){
                 const id = Number(e.target.getAttribute('id'))
-                let searchedItem = this.items.find(o => o.id === id);
+                let searchedItem = this.items.find(o => o.staff_id === id);
 
-                document.getElementById('edit-id').value = searchedItem.id
+                document.getElementById('edit-id').value = searchedItem.staff_id
                 document.getElementById('edit-nama').value = searchedItem.nama
                 document.getElementById('edit-email').value = searchedItem.user.email
+                document.getElementById('edit-old-email').value = searchedItem.user.email
             },
         }))
     });

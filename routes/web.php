@@ -27,7 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
     Route::middleware('can:both')->group(function (){
-        Route::prefix('anggota')->controller(AnggotaConroller::class)->group(function(){
+        Route::prefix('masyarakat')->controller(AnggotaConroller::class)->group(function(){
             Route::get('/', function () {
                 return view('app.anggota');
             })->name('anggota');
@@ -49,7 +49,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
             Route::post('submit-data', 'setorSampah')->name('setor-sampah.submit-data');
         });
 
-        Route::prefix('request-tarik-dana')->group(function (){
+        Route::prefix('request-tarik-tabungan')->group(function (){
             Route::get('/', function (){
                 return view('app.request-tarik-dana');
             })->name('request-tarik-dana');
@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function(){
         Route::prefix('staff')->controller(StaffController::class)->group(function (){
             Route::get('/', function () {
                 return view('app.staff');
-            })->name('staff');
+            })->name('staffs');
 
             Route::get('/data', 'getData');
             Route::post('edit-data', 'editData')->name('staff.edit-data');

@@ -12,9 +12,10 @@ class Sampah extends Model
 
     protected $table = 'tipe_sampah';
 
-    protected $guarded = ['id'];
+    protected $guarded = ['transaksi_id'];
+    protected $primaryKey = 'tipe_sampah_id';
 
     public function transaksiSampah() : BelongsToMany {
-        return $this->belongsToMany(Transaksi::class, 'transaksi_sampah', '', '')->using(TransaksiSampah::class);
+        return $this->belongsToMany(Transaksi::class, 'transaksi_sampah', 'tipe_sampah_id', 'transaksi_id')->using(TransaksiSampah::class);
     }
 }

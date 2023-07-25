@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'id' => 1,
+            'user_id' => 1,
             'name' => 'admin',
             'email' => 'admin@mail.co',
             'password' => Hash::make('12345678'),
@@ -30,7 +30,7 @@ class AdminSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'id' => 2,
+            'user_id' => 2,
             'name' => 'staff',
             'email' => 'staff@mail.co',
             'password' => Hash::make('12345678'),
@@ -44,14 +44,14 @@ class AdminSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'id' => 3,
+            'user_id' => 3,
             'name' => 'member',
             'email' => 'member@mail.co',
             'password' => Hash::make('12345678'),
             'role' => 'member'
         ]);
 
-        DB::table('anggota')->insert([
+        DB::table('masyarakat')->insert([
             'user_id' => 3,
             'nama' => 'member',
             'no_nik' => mt_rand(1000000000000000, 9999999999999999),

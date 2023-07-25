@@ -50,7 +50,7 @@
                             <input id="search-input" type="search"  name="query" x-on:keyup.enter="searchSubmit" x-on:input="searchInput"
                                    class="py-2 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500"
                                    @canany(['admin', 'staff'])
-                                   placeholder="Cari nama anggota atau kode transaksi"
+                                   placeholder="Cari nama masyarakat atau kode transaksi"
                                    @endcanany
                                    @canany(['member'])
                                    placeholder="Cari kode transaksi"
@@ -72,7 +72,7 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Nama Anggota
+                                Nama Masyarakat
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Kode Transaksi
@@ -128,7 +128,7 @@
                                 :class="!items ? 'hidden' : ''">
                                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="pl-3">
-                                        <div class="text-base font-semibold" x-text="transaksi?.anggota?.nama"></div>
+                                        <div class="text-base font-semibold" x-text="transaksi?.masyarakat?.nama"></div>
                                     </div>
                                 </th>
                                 <td class="px-6 py-4" x-text="transaksi.kode_transaksi"></td>
@@ -136,7 +136,7 @@
                                 <td class="px-6 py-4" x-text="transaksi.arus_transaksi"></td>
                                 <td class="px-6 py-4" x-text="transaksi.jumlah_uang"></td>
                                 <td class="px-6 py-4">
-                                    <button x-on:click="detailTransaksi" :id="'detail-' + transaksi.id" class="text-indigo-600">Detail</button>
+                                    <button x-on:click="detailTransaksi" :id="'detail-' + transaksi.transaksi_id" class="text-indigo-600">Detail</button>
                                 </td>
                             </tr>
                         </template>
@@ -514,7 +514,9 @@
             detailTransaksi(e){
                 const oid = (e.target.getAttribute('id'))
                 const id = Number(oid.slice(7))
-                let searchedItem = this.items.find(o => o.id === id);
+                let searchedItem = this.items.find(o => o.transaksi_id === id);
+
+                console.log(searchedItem)
 
                 window.location.href = "http://localhost:8080/histori-transaksi/detail?kode=" + searchedItem.kode_transaksi;
             },

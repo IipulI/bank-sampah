@@ -22,10 +22,11 @@
                     <div>
                         <button type="button" class="flex items-center text-sm bg-white rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                             <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+                            <div class="inline-flex items-center justify-center w-8 h-8 rounded-full text-center align-middle bg-gray-500 text-white font-semibold">{{ strtoupper(mb_substr(Auth::user()->name, 0, 1)) }}</div>
+{{--                            <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">--}}
 
                             <div class="font-sans font-semibold ml-4 leading-6">
-                                {{ Auth::user()->name }}
+                                {{ ucwords(Auth::user()->name) }}
                             </div>
 
                             <div class="ml-2">
@@ -38,16 +39,16 @@
                     <div class="z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 hidden" id="dropdown-user" data-popper-placement="bottom" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(785px, 202px);">
                         <div class="px-4 py-3" role="none">
                             <p class="text-sm text-gray-900 dark:text-white" role="none">
-                                {{ Auth::user()->name }}
+                                {{ ucwords(Auth::user()->name) }}
                             </p>
                             <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
                                 {{ Auth::user()->email }}
                             </p>
                         </div>
                         <ul class="py-1" role="none">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+{{--                            <x-dropdown-link :href="route('profile.edit')">--}}
+{{--                                {{ __('Profile') }}--}}
+{{--                            </x-dropdown-link>--}}
 
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">

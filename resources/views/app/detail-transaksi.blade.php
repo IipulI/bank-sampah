@@ -20,7 +20,7 @@
                         <tr>
                             <td class="text-left align-top pr-4">Nama Anggota</td>
                             <td class="align-top">:</td>
-                            <td class="px-2">{{ $transaksi->anggota->nama }}</td>
+                            <td class="px-2">{{ $transaksi->masyarakat->nama }}</td>
                         </tr>
                         <tr>
                             <td class="text-left align-top pr-4">Tanggal Transaksi</td>
@@ -45,6 +45,7 @@
                     </table>
                 </div>
 
+                @if($transaksi->arus_transaksi === 'masuk')
                 <div class="grow bg-white rounded-lg shadow-md w-1/2 h-fit">
                     <div class="px-4 py-4">
                         <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">List Barang</div>
@@ -82,6 +83,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
         </div>
     </div>

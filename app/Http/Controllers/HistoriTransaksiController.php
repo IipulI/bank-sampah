@@ -16,7 +16,7 @@ class HistoriTransaksiController extends Controller
         $filter = $request->input('type');
 
         $transaksi = Transaksi::query()
-            ->with('anggota')
+            ->with('masyarakat')
             ->with('staff')
 //            ->has('tipeSampah')
             ->when($search != null, function (Builder $query) use ($search) {
@@ -47,7 +47,7 @@ class HistoriTransaksiController extends Controller
     public function detail(Request $request){
 
         $transaksi = Transaksi::query()
-            ->with('anggota')
+            ->with('masyarakat')
             ->with('staff')
             ->with('tipeSampah')
             ->where('kode_transaksi', $request->input('kode'))

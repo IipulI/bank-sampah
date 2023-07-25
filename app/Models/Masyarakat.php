@@ -10,27 +10,31 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class Anggota extends Model
+class Masyarakat extends Model
 {
     use HasFactory;
 
-    protected $table = 'anggota';
+    protected $table = 'masyarakat';
+
+    protected $primaryKey = 'no_nik';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     protected $guarded = ['id'];
 
     public function user() : BelongsTo{
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
 
     public function transaksi() : HasMany{
-        return $this->hasMany(Transaksi::class);
+        return $this->hasMany(Transaksi::class, 'no_nik', 'no_nik');
     }
 
     public function tabungan() : HasOne{
-        return $this->hasOne(Tabungan::class);
+        return $this->hasOne(Tabungan::class, 'no_nik', 'no_nik');
     }
 
     public function latestTransaksi() : HasOne{
-        return $this->hasOne(Transaksi::class);
+        return $this->hasOne(Transaksi::class, 'no_nik', 'no_nik');
     }
 }

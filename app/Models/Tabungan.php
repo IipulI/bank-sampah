@@ -13,5 +13,6 @@ class Tabungan extends Model
 
     protected $table = 'tabungan';
 
-    protected $guarded = ['id'];
+    protected $guarded = ['tabugnan_id'];
+    protected $primaryKey = 'tabungan_id';
 }

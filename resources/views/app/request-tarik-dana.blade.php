@@ -6,7 +6,7 @@
             <div class="bg-white rounded-md shadow-md">
                 <div x-data="anggota" class="px-4 py-4">
                     <div class="flex items-center border-b-2 py-2">
-                        <div class="ml-4 font-semibold font-grey-600">Anggota</div>
+                        <div class="ml-4 font-semibold text-2xl font-grey-600">Masyarakat</div>
                         <div class="mr-4 w-80 lg:w-2/4 px-4">
                             <div x-data="selectConfigs()" x-init="fetchOptions()" class="flex flex-col items-center relative">
                                 <div class="hidden">
@@ -23,7 +23,7 @@
                                             @keydown.enter.stop.prevent="selectOption()"
                                             @keydown.arrow-up.prevent="focusPrevOption()"
                                             @keydown.arrow-down.prevent="focusNextOption()"
-                                            class="p-1 px-2 appearance-none outline-none w-full text-gray-800" placeholder="ketik nama anggota">
+                                            class="p-1 px-2 appearance-none outline-none w-full text-gray-800" placeholder="Ketik nama masyarakat">
                                     </div>
                                 </div>
 
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="border-b-2">
-                        <span class="mx-4 font-semibold text-gray-700 text-xl">Informasi Anggota</span>
+                        <span class="mx-4 font-semibold text-gray-700 text-xl">Informasi Masyarakat</span>
 
                         <table class="my-4 mx-8 text-left">
                             <tr>
@@ -58,11 +58,11 @@
                                     <td x-text="selectedMember?.nama"></td>
                                 </template>
                                 <template x-if="!selectedMember">
-                                    <td >Pilih Anggota Terlebih Dahulu</td>
+                                    <td >Pilih Masyarakat Terlebih Dahulu</td>
                                 </template>
                             </tr>
                             <tr>
-                                <th class="text-gray-700 font-semibold text-lg">Jumlah Dana</th>
+                                <th class="text-gray-700 font-semibold text-lg">Jumlah Tabungan</th>
                                 <td class="px-2 hidden md:block">:</td>
                                 <template x-if="selectedMember !== null">
                                     <td>
@@ -70,7 +70,7 @@
                                     </td>
                                 </template>
                                 <template x-if="!selectedMember">
-                                    <td >Pilih Anggota Terlebih Dahulu</td>
+                                    <td >Pilih Masyarakat Terlebih Dahulu</td>
                                 </template>
                             </tr>
                             <tr>
@@ -80,7 +80,7 @@
                                     <td x-text="selectedMember?.no_nik"></td>
                                 </template>
                                 <template x-if="!selectedMember">
-                                    <td >Pilih Anggota Terlebih Dahulu</td>
+                                    <td >Pilih Masyarakat Terlebih Dahulu</td>
                                 </template>
                             </tr>
                             <tr>
@@ -90,7 +90,7 @@
                                     <td x-text="selectedMember?.latest_transaksi?.tanggal_transaksi"></td>
                                 </template>
                                 <template x-if="!selectedMember">
-                                    <td >Pilih Anggota Terlebih Dahulu</td>
+                                    <td >Pilih Masyarakat Terlebih Dahulu</td>
                                 </template>
                             </tr>
                         </table>
@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-2 my-2">
                                     <div class="w-48">
-                                        <label for="setelah-tarik" class="font-semibold text-gray-600">Dana setelah ditarik</label>
+                                        <label for="setelah-tarik" class="font-semibold text-gray-600">Tabungan setelah ditarik</label>
                                     </div>
                                     <input x-model="setelahTarik"
                                            name="setelahTarik" id="setelah-tarik" class="shadow-md rounded border px-2 py-1 border-gray-300 bg-gray-100" disabled>
@@ -151,10 +151,10 @@
             async submitData(){
                 let obj = {
                     inputTarik : this.inputTarik,
-                    anggotaId : this.selectedMember.id
+                    no_nik : this.selectedMember.no_nik
                 }
 
-                let callApi = await fetch('http://localhost:8080/request-tarik-dana/submit', {
+                let callApi = await fetch('http://localhost:8080/request-tarik-tabungan/submit', {
                     method: "post",
                     headers: {
                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
@@ -196,9 +196,9 @@
             },
             isOpen() { return this.show === true },
             selectedName() { return this.selected ? this.selected.nama : this.filter; },
-            selectedId() { return this.selected ? this.selected.id : this.filter },
+            selectedId() { return this.selected ? this.selected.no_nik : this.filter },
             classOption(id, index) {
-                const isSelected = this.selected ? (id === this.selected.id) : false;
+                const isSelected = this.selected ? (id === this.selected.no_nik) : false;
                 const isFocused = (index === this.focusedOptionIndex);
                 return {
                     'cursor-pointer w-full border-gray-100 border-b hover:bg-blue-50': true,
@@ -241,7 +241,7 @@
                 }
                 this.focusedOptionIndex = this.focusedOptionIndex ?? 0;
                 const selected = this.filteredOptions()[this.focusedOptionIndex]
-                if (this.selected && this.selected.id === selected.id) {
+                if (this.selected && this.selected.no_nik === selected.no_nik) {
                     // this.filter = '';
                     // this.selected = null;
                     // this.selectedMember = null;

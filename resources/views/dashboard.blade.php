@@ -6,24 +6,29 @@
 {{--    </x-slot>--}}
 
     <div class="p-4 sm:ml-64">
-        <div class="p-4 mt-14">
+        <div class="p-4 mt-14 mb-4">
             <div class="bg-white rounded-lg shadow-md">
-                <div class="px-4 py-4 flex justify-between w-full">
-                    <div class="font-semibold text-lg text-gray-600">
-                        Jumlah Kas
+                <div class="px-6 py-6 flex justify-between text-2xl w-full">
+                    <div class="font-semibold text-gray-600">
+                        @canany(['admin', 'staff'])
+                        Jumlah Kas Bank Sampah
+                        @endcanany
+                        @can('member')
+                        Jumlah Tabungan
+                        @endcan
                     </div>
-                    <div class="text-right font-semibold text-lg text-gray-600">
+                    <div class="text-right font-semibold text-gray-600">
                         Rp. {{ $saldo_kas }}
                     </div>
                 </div>
             </div>
 
-            <div class="py-4 flex gap-x-2">
+            <div class="py-4 flex flex-wrap gap-y-4 gap-x-2">
                 @canany(['admin', 'staff'])
-                <div class="flex flex-col gap-y-4 w-1/4">
+                <div class="flex flex-col gap-y-4 flex-1 w-1/4">
                     <div class="bg-white rounded-lg shadow-md ">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Jumlah anggota</div>
+                            <div class="font-semibold  text-xl text-gray-600 border-b-4 w-full">Jumlah Masyarakat</div>
                             <div class="flex items-center justify-around mt-4">
                                 <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
                                     <title>account-group</title>
@@ -36,7 +41,7 @@
                     </div>
                     <div class="bg-white rounded-lg shadow-md ">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Jumlah Tipe Sampah </div>
+                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Tipe Sampah</div>
                             <div class="flex items-center justify-around mt-4">
                                 <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
                                     <title>account-group</title>
@@ -49,7 +54,7 @@
                     </div>
                     <div class="bg-white rounded-lg shadow-md ">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Jumlah Transaksi Masuk </div>
+                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Transaksi Masuk </div>
                             <div class="flex items-center justify-around mt-4">
                                 <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
                                     <title>receipt-in</title>
@@ -64,10 +69,10 @@
                 @endcanany
 
                 @canany(['admin', 'staff'])
-                <div class="flex flex-col gap-y-4 w-1/4">
+                <div class="flex flex-col flex-wrap gap-y-4 flex-1 w-1/4">
                     <div class="bg-white rounded-lg shadow-md">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Jumlah Staff</div>
+                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Staff</div>
                             <div class="flex items-center justify-around mt-4">
                                 <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
                                     <title>shield-account</title>
@@ -80,7 +85,7 @@
                     </div>
                     <div class="bg-white rounded-lg shadow-md">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Jumlah Sampah Masuk</div>
+                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Sampah Masuk</div>
                             <div class="flex items-center justify-around mt-4">
                                 <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
                                     <title>shield-account</title>
@@ -93,7 +98,7 @@
                     </div>
                     <div class="bg-white rounded-lg shadow-md">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Jumlah Transaksi Keluar</div>
+                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Transaksi Keluar</div>
                             <div class="flex items-center justify-around mt-4">
                                 <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
                                     <title>shield-account</title>
@@ -110,23 +115,27 @@
 
                 <div class="grow h-fit bg-white rounded-lg shadow-md w-1/2">
                     <div class="px-4 py-4">
-                        <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">Histori Transaksi</div>
-                            <table class="px-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <div class="font-semibold text-xl text-gray-600 border-b-4">Histori Transaksi</div>
+                        <div class="overflow-x-auto">
+                            <table class="px-4 text-sm w-full text-left text-gray-500 dark:text-gray-400">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Kode Transaksi
                                     </th>
                                     @canany(['staff', 'admin'])
-                                    <th scope="col" class="px-6 py-3">
-                                        Nama Anggota
-                                    </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Nama Masyarakat
+                                        </th>
                                     @endcanany
                                     <th scope="col" class="px-6 py-3">
                                         Alur Transaksi
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Jumlah
+                                    </th>
+                                    <th>
+                                        Action
                                     </th>
                                 </tr>
                                 </thead>
@@ -137,15 +146,18 @@
                                             {{ $item->kode_transaksi }}
                                         </td>
                                         @canany(['staff', 'admin'])
-                                        <td class="px-6 py-4">
-                                            {{ $item->anggota->nama }}
-                                        </td>
+                                            <td class="px-6 py-4">
+                                                {{ $item->masyarakat->nama }}
+                                            </td>
                                         @endcanany
                                         <td class="px-6 py-4">
                                             Transaksi {{ $item->arus_transaksi }}
                                         </td>
                                         <td class="px-6 py-4">
                                             Rp. {{ $item->jumlah_uang }}
+                                        </td>
+                                        <td>
+                                            <a href="http://localhost:8080/histori-transaksi/detail?kode={{ $item->kode_transaksi }}" class="text-indigo-600 hover:underline">Detail</a>
                                         </td>
                                     </tr>
                                 @endforeach

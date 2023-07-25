@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Masyarakat;
 use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,17 +26,32 @@ class StaffController extends Controller
     }
 
     public function submitData(Request $request){
+        $inputMail = $request->input('email');
+
+        $userMail = User::query()
+            ->where('email', $inputMail)
+            ->first();
+
+        if ($userMail != null){
+            return redirect()->back()->with([
+                'type' => 'error',
+                'title' => 'Duplikasi data',
+                'message' => 'User dengan email : ' . $inputMail . ' Sudah ada, mohon ganti dengan email lain'
+            ]);
+        }
+
         try {
             DB::beginTransaction();
 
             $anggota = User::create([
                 'name' => $request->input('nama'),
-                'email' => $request->input('email'),
+                'email' => $inputMail,
                 'password' => Hash::make($request->input('password')),
                 'role' => 'staff'
             ]);
 
-            $anggota->staff()->create([
+            Staff::create([
+                'user_id' => $anggota->id,
                 'nama' => $request->input('nama'),
                 'role' => 'staff'
             ]);
@@ -44,39 +60,52 @@ class StaffController extends Controller
         } catch (\Exception $e){
             DB::rollBack();
 
-            return $e;
+            throw $e;
         }
 
         return redirect('staff')->with([
-            'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
+            'type' => 'success',
+            'title' => 'Data berhasil ditambahkan',
+            'message' => 'Staff ' . $request->input('nama') .' berhasil ditambahkan'
         ]);
     }
 
     public function editData(Request $request){
+        $staff = Staff::query()
+            ->with('user')
+            ->where('staff_id', $request->input('id'))
+            ->first();
+        $user = User::query()
+            ->where('email', $request->input('old_email'))
+            ->first();
+
+        if (!$staff || !$user){
+            return redirect('staff')->with([
+                'type' => 'error',
+                'title' => 'Data tidak ditemukan',
+                'message' => 'Terjadi kesalahan perubahan data'
+            ]);
+        }
+
         try {
             DB::beginTransaction();
 
-            $sampah = Staff::query()
-                ->with('user')
-                ->where('id', $request->input('id'))
-                ->firstOrFail();
-
-            $sampah->nama = $request->input('nama');
-            $sampah->user->email = $request->input('email');
-            $sampah->no_nik = $request->input('no_nik');
-            $sampah->alamat = $request->input('alamat');
-            $sampah->nomor_telepon = $request->input('nomor_telepon');
-            $sampah->save();
+            $staff->nama = $request->input('nama');
+            $user->email = $request->input('email');
+            $user->save();
+            $staff->save();
 
             DB::commit();
         } catch (\Exception $e){
             DB::rollBack();
 
-            return $e;
+            throw $e;
         }
 
         return redirect('staff')->with([
-            'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
+            'type' => 'success',
+            'title' => 'Data berhasil dirubah',
+            'message' => 'Staff ' . $request->input('nama') .' berhasil ditambahkan'
         ]);
     }
 }

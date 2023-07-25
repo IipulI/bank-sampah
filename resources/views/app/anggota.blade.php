@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout xmlns:x-slot="http://www.w3.org/1999/xlink">
 
     <div class="p-4 sm:ml-64">
         <div class="p-4 mt-14">
@@ -12,7 +12,7 @@
                             <svg width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="text-white mr-1"><title>plus-circle</title>
                                 <path d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
                             </svg>
-                            Tambah Anggota
+                            Tambah Masyarakat
                         </button>
                     </div>
 
@@ -21,7 +21,7 @@
                         <label for="search-input" class="sr-only">Search</label>
                         <div class="relative flex rounded-md shadow-sm">
                             <input id="search-input" type="search"  name="query" x-on:keyup.enter="searchSubmit" x-on:input="searchInput"
-                                   class="py-2 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari nama anggota atau nik">
+                                   class="py-2 px-4 pl-11 block w-full border-gray-200 shadow-sm rounded-l-md text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="Cari nama masyarakat atau nik">
                             <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none z-20 pl-4">
                                 <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -38,7 +38,7 @@
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Name
+                                Nama
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Nik
@@ -99,8 +99,8 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <!-- Modal toggle -->
-                                    <button href="#" @click="selectItem" onclick="toggleModal('edit-anggota-modal')" :id="anggota.id" class="mr-1 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-                                    <button href="#" @click="detailAnggota" :id="'detail-' + anggota.id" class="mx-1 font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</button>
+                                    <button href="#" @click="selectItem" onclick="toggleModal('edit-anggota-modal')" :id="anggota.no_nik" class="mr-1 font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                                    <button href="#" @click="detailAnggota" :id="'detail-' + anggota.no_nik" class="mx-1 font-medium text-blue-600 dark:text-blue-500 hover:underline">Detail</button>
                                 </td>
                             </tr>
                         </template>
@@ -143,16 +143,54 @@
         </div>
     </div>
 
+    @if( \Illuminate\Support\Facades\Session::has('type') )
+    <x-error-modal>
+        @if(\Illuminate\Support\Facades\Session::get('type') == 'error')
+            <x-slot:color>
+                bg-red-100
+            </x-slot:color>
+            <x-slot:colortext>
+                text-red-600
+            </x-slot:colortext>
+            <x-slot:svg>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path>
+            </x-slot:svg>
+        @endif
+        @if(\Illuminate\Support\Facades\Session::get('type') == 'success')
+            <x-slot:color>
+                bg-green-100
+            </x-slot:color>
+            <x-slot:colortext>
+                text-green-600
+            </x-slot:colortext>
+            <x-slot:svg>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+            </x-slot:svg>
+        @endif
+
+        <x-slot:title>
+            {{ \Illuminate\Support\Facades\Session::get('title') }}
+        </x-slot:title>
+        <x-slot:message>
+            {{ \Illuminate\Support\Facades\Session::get('message') }}
+        </x-slot:message>
+    </x-error-modal>
+    @endif
+
     <!-- Edit Item Sampah Modal -->
     <x-forms.input id="edit-anggota-modal" route="anggota.edit-data">
         <x-slot:title>
             Edit Anggota
         </x-slot:title>
 
-        <div>
+        <div class="hidden">
             <label for="edit-id" class="hidden">Id</label>
             <input type="text" name="id" id="edit-id" class="hidden">
 
+            <label for="edit-old-email" class="hidden">Id</label>
+            <input type="text" name="old_email" id="edit-old-email" class="hidden">
+        </div>
+        <div>
             <label for="edit-nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
             <input type="text" name="nama" id="edit-nama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
         </div>
@@ -219,7 +257,7 @@
             lastPage : null,
             navItems : null,
             async init() {
-                let resp = await fetch('http://localhost:8080/anggota/data');
+                let resp = await fetch('http://localhost:8080/masyarakat/data');
                 const listItems = await resp.json();
 
                 this.items = listItems.data
@@ -276,8 +314,10 @@
                 const oid = elem.getAttribute('id')
                 const id = Number(oid.slice(7))
 
-                let searchedItem = this.items.find(o => o.id === id);
-                window.location.href = "http://localhost:8080/anggota/detail?nik=" + searchedItem.no_nik;
+
+                let searchedItem = this.items.find(o => Number(o.no_nik) === id);
+
+                window.location.href = "http://localhost:8080/masyarakat/detail?nik=" + searchedItem.no_nik;
             },
 
             async searchSubmit(e){
@@ -289,7 +329,7 @@
                 const input = document.getElementById('search-input')
                 const value = input.value
 
-                let resp = await fetch('http://localhost:8080/anggota/data?search=' + value);
+                let resp = await fetch('http://localhost:8080/masyarakat/data?search=' + value);
                 const listItems = await resp.json();
 
                 this.lastPage = listItems.last_page
@@ -385,7 +425,7 @@
                 const search = document.getElementById('search-input')
                 const searchValue = search.value !== '' ? '&search=' + search.value : ''
 
-                let resp = await fetch('http://localhost:8080/anggota/data?page=' + value + searchValue )
+                let resp = await fetch('http://localhost:8080/masyarakat/data?page=' + value + searchValue )
                 const listItems = await resp.json();
                 const nextButton = document.getElementById('next')
 
@@ -451,11 +491,12 @@
 
             selectItem(e){
                 const id = Number(e.target.getAttribute('id'))
-                let searchedItem = this.items.find(o => o.id === id);
+                let searchedItem = this.items.find(o => Number(o.no_nik) === id);
 
-                document.getElementById('edit-id').value = searchedItem.id
+                document.getElementById('edit-old-email').value = searchedItem.user?.email
+                document.getElementById('edit-id').value = searchedItem.no_nik
                 document.getElementById('edit-nama').value = searchedItem.nama
-                document.getElementById('edit-email').value = searchedItem.user.email
+                document.getElementById('edit-email').value = searchedItem.user?.email
                 document.getElementById('edit-nik').value = searchedItem.no_nik
                 document.getElementById('edit-alamat').value = searchedItem.alamat
                 document.getElementById('edit-telephone').value = searchedItem.nomor_telepon

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Anggota;
+use App\Models\Masyarakat;
 use App\Models\Sampah;
 use App\Models\Tabungan;
 use App\Models\Transaksi;
@@ -25,53 +25,6 @@ class SampahController extends Controller
             ->paginate(10);
 
         return $sampah;
-    }
-
-    public function submitData(Request $request){
-        try {
-            DB::beginTransaction();
-
-            $sampah = new Sampah();
-            $sampah->nama = $request->input('nama');
-            $sampah->satuan = $request->input('satuan');
-            $sampah->harga_satuan = $request->input('harga_satuan');
-            $sampah->save();
-
-            DB::commit();
-        } catch (\Exception $e){
-            DB::rollBack();
-
-            return $e;
-        }
-
-        return redirect('tipe-sampah')->with([
-            'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
-        ]);
-    }
-
-    public function editData(Request $request){
-        try {
-            DB::beginTransaction();
-
-            $sampah = Sampah::query()
-                ->where('id', $request->input('id'))
-                ->firstOrFail();
-
-            $sampah->nama = $request->input('nama');
-            $sampah->satuan = $request->input('satuan');
-            $sampah->harga_satuan = $request->input('harga_satuan');
-            $sampah->save();
-
-            DB::commit();
-        } catch (\Exception $e){
-            DB::rollBack();
-
-            return $e;
-        }
-
-        return redirect('tipe-sampah')->with([
-            'message' => 'Data ' . 'nama_data' .' Berhasil dirubah'
-        ]);
     }
 
     public function getSampah(Request $request){
@@ -98,7 +51,7 @@ class SampahController extends Controller
     public function getMember(Request $request){
         $search = $request->input('search');
 
-        return Anggota::query()
+        return Masyarakat::query()
             ->with(['latestTransaksi' => function($query){
                 $query->latest()->first();
             }])
@@ -113,13 +66,13 @@ class SampahController extends Controller
         try {
             DB::beginTransaction();
 
-            $anggota = Anggota::query()
-                ->with('tabungan')
-                ->where('id', $request->input('anggota_id'))
-                ->first();
+//            $anggota = Masyarakat::query()
+//                ->with('tabungan')
+//                ->where('no_nik', $request->input('no_nik'))
+//                ->first();
 
             $tabungan = Tabungan::query()
-                ->where('anggota_id', $request->input('anggota_id'))
+                ->where('no_nik', $request->input('no_nik'))
                 ->first();
 
             if ($tabungan != null){
@@ -127,14 +80,14 @@ class SampahController extends Controller
                 $tabungan->save();
             } else {
                 $newTab = new Tabungan();
-                $newTab->anggota_id = $request->input('anggota_id');
+                $newTab->no_nik = $request->input('no_nik');
                 $newTab->jumlah_uang = $request->input('total_harga');
                 $newTab->save();
             }
 
             $transaksi = Transaksi::create([
-                'staff_id' => Auth::user()->id,
-                'anggota_id' => $request->input('anggota_id'),
+                'staff_id' => Auth::id(),
+                'no_nik' => $request->input('no_nik'),
                 'kode_transaksi' => 'TRX-I-' . Carbon::now()->format('d-m-Y-G-i-s-u'),
                 'jumlah_uang' => $request->total_harga,
                 'tanggal_transaksi' => Carbon::today(),
@@ -164,13 +117,13 @@ class SampahController extends Controller
     }
 
     public function tarikDana(Request $request){
-        $anggota =  Anggota::query()
+        $anggota =  Masyarakat::query()
             ->with('tabungan')
-            ->where('id', $request->input('anggotaId'))
+            ->where('no_nik', $request->input('no_nik'))
             ->first();
 
         $tabungan = Tabungan::query()
-            ->where('anggota_id', $request->input('anggotaId'))
+            ->where('no_nik', $request->input('no_nik'))
             ->first();
 
         try {
@@ -180,7 +133,7 @@ class SampahController extends Controller
             $tabungan->save();
 
             $anggota->transaksi()->create([
-                'staff_id' => Auth::user()->id,
+                'staff_id' => Auth::id(),
                 'jumlah_uang' => $request->input('inputTarik'),
                 'kode_transaksi' => 'TRX-O-' . Carbon::now()->format('d-m-Y-G-i-s-u'),
                 'tanggal_transaksi' => Carbon::today(),

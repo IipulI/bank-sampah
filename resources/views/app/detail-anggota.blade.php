@@ -17,7 +17,7 @@
 
             <div class="flex flex-wrap gap-x-2 gap-y-4">
                 <div class="grow bg-white rounded-lg shadow-md px-4 py-4 w-80 h-fit">
-                    <div class="text-2xl font-semibold text-gray-600 border-b-4">Profil Anggota</div>
+                    <div class="text-2xl font-semibold text-gray-600 border-b-4">Profil Masyarakat</div>
                     <table class="mx-2 my-2">
                         <tr>
                             <td class="text-left align-top pr-4">Nama</td>
@@ -37,7 +37,7 @@
                         <tr>
                             <td class="text-left align-top pr-4">Alamat</td>
                             <td class="align-top">:</td>
-                            <td class="px-2 max-w-md break-words">{{ $anggota->alamat }}</td>
+                            <td class="px-2 max-w-sm break-words">{{ $anggota->alamat }}</td>
                         </tr>
                         <tr>
                             <td class="text-left align-top pr-4">Telepon</td>
