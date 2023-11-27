@@ -13,8 +13,10 @@ class Transaksi extends Model
 
     protected $table = 'transaksi';
 
-    protected $guarded = ['transaksi_id'];
-    protected $primaryKey = 'transaksi_id';
+    protected $guarded = ['kode_transaksi'];
+    protected $primaryKey = 'kode_transaksi';
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     public function masyarakat() : BelongsTo {
         return $this->belongsTo(Masyarakat::class, 'no_nik', 'no_nik');
@@ -25,6 +27,6 @@ class Transaksi extends Model
     }
 
     public function TipeSampah() : BelongsToMany {
-        return $this->belongsToMany(Sampah::class, 'transaksi_sampah', 'transaksi_id', 'tipe_sampah_id')->withPivot('timbangan', 'harga');
+        return $this->belongsToMany(Sampah::class, 'transaksi_sampah', 'kode_transaksi', 'kode_sampah')->withPivot('timbangan', 'harga');
     }
 }

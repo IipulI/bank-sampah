@@ -136,7 +136,7 @@
                                 <td class="px-6 py-4" x-text="transaksi.arus_transaksi"></td>
                                 <td class="px-6 py-4" x-text="transaksi.jumlah_uang"></td>
                                 <td class="px-6 py-4">
-                                    <button x-on:click="detailTransaksi" :id="'detail-' + transaksi.transaksi_id" class="text-indigo-600">Detail</button>
+                                    <button x-on:click="detailTransaksi" :id="transaksi.kode_transaksi" class="text-indigo-600">Detail</button>
                                 </td>
                             </tr>
                         </template>
@@ -190,8 +190,14 @@
             curPage : 1,
             lastPage : null,
             navItems : null,
+            role : "{{ Auth::user()->role }}",
             async init() {
-                let resp = await fetch('http://localhost:8080/histori-transaksi/data');
+                let param = '';
+                if(this.role === 'member'){
+                    param = '?user_id=' + "{{Auth::user()->user_id}}";
+                }
+
+                let resp = await fetch('http://localhost:8080/histori-transaksi/data' + param);
                 const listItems = await resp.json();
                 this.items = listItems.data
                 this.lastPage = listItems.last_page
@@ -245,6 +251,11 @@
             async filterType(){
                 const elemType = document.getElementById('filter-type')
 
+                let user = '';
+                if(this.role === 'member'){
+                    user = 'user_id=' + "{{Auth::user()->user_id}}";
+                }
+
                 if(elemType.value !== '' || elemType.value !== null){
                     this.navItems = null
                     this.items = null
@@ -255,7 +266,7 @@
                     const elemDateStart = document.getElementById('date-start')
                     const elemDateEnd = document.getElementById('date-end')
 
-                    let search = elemSearch.value !== '' ? 'search=' + elemSearch.value : ''
+                    let search = elemSearch.value !== '' ? '&search=' + elemSearch.value : ''
 
                     let filterDate = ''
                     if (elemDateEnd.value !== '' || elemDateStart.value !== ''){
@@ -269,7 +280,7 @@
                         : '&type=' + elemType.value
 
 
-                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + search + filterDate + filterType)
+                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + user + search + filterDate + filterType)
                     let response = await resp.json()
 
                     this.lastPage = response.last_page
@@ -282,6 +293,11 @@
             async searchSubmit(){
                 const elemSearch = document.getElementById('search-input')
 
+                let user = '';
+                if(this.role === 'member'){
+                    user = 'user_id=' + "{{Auth::user()->user_id}}";
+                }
+
                 if(elemSearch.value !== ''){
                     this.navItems = null
                     this.items = null
@@ -292,7 +308,7 @@
                     const elemDateStart = document.getElementById('date-start')
                     const elemDateEnd = document.getElementById('date-end')
 
-                    let search = elemSearch.value !== '' ? 'search=' + elemSearch.value : ''
+                    let search = elemSearch.value !== '' ? '&search=' + elemSearch.value : ''
 
                     let filterDate = ''
                     if (elemDateEnd.value !== '' || elemDateStart.value !== ''){
@@ -306,7 +322,7 @@
                         : '&type=' + elemType.value
 
 
-                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + search + filterDate + filterType)
+                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + user + search + filterDate + filterType)
                     let response = await resp.json()
 
                     this.lastPage = response.last_page
@@ -319,6 +335,11 @@
             async filterDate(){
                 const elemDateStart = document.getElementById('date-start')
                 const elemDateEnd = document.getElementById('date-end')
+
+                let user = '';
+                if(this.role === 'member'){
+                    user = 'user_id=' + "{{Auth::user()->user_id}}";
+                }
 
                 if (elemDateStart.value !== '' || elemDateEnd.value !== ''){
                     this.navItems = null
@@ -343,7 +364,7 @@
                         : '&type=' + elemType.value
 
 
-                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + search + filterDate + filterType)
+                    let resp = await fetch('http://localhost:8080/histori-transaksi/data?' + user + search + filterDate + filterType)
                     let response = await resp.json()
 
                     this.lastPage = response.last_page
@@ -512,13 +533,9 @@
             },
 
             detailTransaksi(e){
-                const oid = (e.target.getAttribute('id'))
-                const id = Number(oid.slice(7))
-                let searchedItem = this.items.find(o => o.transaksi_id === id);
+                const id = (e.target.getAttribute('id'))
 
-                console.log(searchedItem)
-
-                window.location.href = "http://localhost:8080/histori-transaksi/detail?kode=" + searchedItem.kode_transaksi;
+                window.location.href = "http://localhost:8080/histori-transaksi/detail?kode=" + id;
             },
         }))
     });

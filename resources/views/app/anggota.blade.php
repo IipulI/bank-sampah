@@ -43,6 +43,9 @@
                             <th scope="col" class="px-6 py-3">
                                 Nik
                             </th>
+                            <th scope="col" class="px-6 py-3">
+                                Tabungan
+                            </th>
                             <th scope="col" class="max-w-md px-6 py-3">
                                 Alamat
                             </th>
@@ -61,6 +64,9 @@
                                     <th>
                                         <div class="mx-6 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
                                     </th>
+                                    <td>
+                                        <div class="mx-4 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
+                                    </td>
                                     <td>
                                         <div class="mx-4 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
                                     </td>
@@ -92,6 +98,8 @@
                                     </div>
                                 </th>
                                 <td class="px-6 py-4" x-text="anggota.no_nik">
+                                </td>
+                                <td class="px-6 py-4 max-w-[75px] text-ellipsis overflow-hidden" x-text="anggota.tabungan != null ? anggota.tabungan.jumlah_uang : 0">
                                 </td>
                                 <td class="px-6 py-4 max-w-md text-ellipsis overflow-hidden" x-text="anggota.alamat">
                                 </td>

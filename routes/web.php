@@ -19,12 +19,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect('dashboard');
-});
-
 Route::middleware(['auth', 'verified'])->group(function(){
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
     Route::middleware('can:both')->group(function (){
         Route::prefix('masyarakat')->controller(AnggotaConroller::class)->group(function(){
@@ -36,6 +32,16 @@ Route::middleware(['auth', 'verified'])->group(function(){
             Route::get('data', 'getData');
             Route::post('edit-data', 'editData')->name('anggota.edit-data');
             Route::post('submit-data', 'submitData')->name('anggota.submit-data');
+        });
+
+        Route::prefix('tipe-sampah')->controller(SampahController::class)->group(function (){
+            Route::get('/', function () {
+                return view('app.tipe-sampah');
+            })->name('tipe-sampah');
+
+            Route::get('data', 'getData');
+            Route::post('edit-data', 'editData')->name('tipe-sampah.edit-data');
+            Route::post('submit-data', 'submitData')->name('tipe-sampah.submit-data');
         });
 
         Route::prefix('setor-sampah')->controller(SampahController::class)->group(function() {
@@ -67,16 +73,6 @@ Route::middleware(['auth', 'verified'])->group(function(){
             Route::get('/data', 'getData');
             Route::post('edit-data', 'editData')->name('staff.edit-data');
             Route::post('submit-data', 'submitData')->name('staff.submit-data');
-        });
-
-        Route::prefix('tipe-sampah')->controller(SampahController::class)->group(function (){
-            Route::get('/', function () {
-                return view('app.tipe-sampah');
-            })->name('tipe-sampah');
-
-            Route::get('data', 'getData');
-            Route::post('edit-data', 'editData')->name('tipe-sampah.edit-data');
-            Route::post('submit-data', 'submitData')->name('tipe-sampah.submit-data');
         });
     });
 

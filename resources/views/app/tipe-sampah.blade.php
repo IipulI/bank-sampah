@@ -37,6 +37,9 @@
                     <table id="sampahTable" class="px-4 border-b-2 w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+                            <th scope="col" class="px-6 py-3 w-36">
+                                Kode Sampah
+                            </th>
                             <th scope="col" class="px-6 py-3">
                                 Nama
                             </th>
@@ -55,6 +58,9 @@
                             <template x-if="!items">
                                 <template x-for="1 in 10">
                                     <tr class="animate-pulse">
+                                        <th>
+                                            <div class="mx-6 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
+                                        </th>
                                         <th>
                                             <div class="mx-6 my-5 py-2 w-2/4 h-2 bg-slate-400 rounded-lg"></div>
                                         </th>
@@ -80,11 +86,14 @@
                             <template x-for="sampah in items" x-cloak>
                                 <tr aria-label="table-row" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                     :class="!items ? 'hidden' : ''">
-                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                    <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white w-24">
                                         <div class="pl-3">
-                                            <div class="text-base font-semibold" x-text="sampah.nama"></div>
+                                            <div class="text-base font-semibold" x-text="sampah.kode_sampah"></div>
                                         </div>
                                     </th>
+                                    <td class="px-6 py-4">
+                                        <div class="text-base font-semibold text-gray-700 whitespace-nowrap dark:text-white" x-text="sampah.nama"></div>
+                                    </td>
                                     <td class="px-6 py-4" x-text="sampah.satuan">
 
                                     </td>
@@ -95,7 +104,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <!-- Modal toggle -->
-                                        <button href="#" @click="selectItem" onclick="toggleModal('edit-sampah-modal')" :id="sampah.id" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                                        <button href="#" @click="selectItem" onclick="toggleModal('edit-sampah-modal')" :id="sampah.kode_sampah" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                                     </td>
                                 </tr>
                             </template>
@@ -122,7 +131,7 @@
                                         </input>
                                     </template>
                                 </div>
-                                <div class=" flex w-0 flex-1 justify-end">
+                                <div class="flex w-0 flex-1 justify-end">
                                     <button id="next" @click="nextPage" class="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 pb-2 text-sm font-medium text-gray-600 hover:text-gray-400 hover:border-gray-400">Next
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="ml-3 h-5 w-5 text-gray-600">
                                             <path fill-rule="evenodd" d="M2 10a.75.75 0 01.75-.75h12.59l-2.1-1.95a.75.75 0 111.02-1.1l3.5 3.25a.75.75 0 010 1.1l-3.5 3.25a.75.75 0 11-1.02-1.1l2.1-1.95H2.75A.75.75 0 012 10z" clip-rule="evenodd"></path>
@@ -138,6 +147,41 @@
         </div>
     </div>
 
+    <!-- Notif modal -->
+    @if( \Illuminate\Support\Facades\Session::has('type') )
+        <x-error-modal>
+            @if(\Illuminate\Support\Facades\Session::get('type') == 'error')
+                <x-slot:color>
+                    bg-red-100
+                </x-slot:color>
+                <x-slot:colortext>
+                    text-red-600
+                </x-slot:colortext>
+                <x-slot:svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path>
+                </x-slot:svg>
+            @endif
+            @if(\Illuminate\Support\Facades\Session::get('type') == 'success')
+                <x-slot:color>
+                    bg-green-100
+                </x-slot:color>
+                <x-slot:colortext>
+                    text-green-600
+                </x-slot:colortext>
+                <x-slot:svg>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </x-slot:svg>
+            @endif
+
+            <x-slot:title>
+                {{ \Illuminate\Support\Facades\Session::get('title') }}
+            </x-slot:title>
+            <x-slot:message>
+                {{ \Illuminate\Support\Facades\Session::get('message') }}
+            </x-slot:message>
+        </x-error-modal>
+@endif
+
     <!-- Edit Item Sampah Modal -->
     <x-forms.input id="edit-sampah-modal" route="tipe-sampah.edit-data">
         <x-slot:title>
@@ -145,9 +189,11 @@
         </x-slot:title>
 
         <div>
-            <label for="edit-id" class="hidden">Id</label>
-            <input type="text" name="id" id="edit-id" class="hidden">
+            <label for="edit-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode Sampah</label>
+            <input type="text" name="id" id="edit-id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
 
+        </div>
+        <div>
             <label for="edit-nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
             <input type="text" name="nama" id="edit-nama" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
         </div>
@@ -169,16 +215,23 @@
         </x-slot:title>
 
         <div>
-            <label for="create-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama</label>
-            <input type="text" name="nama" id="create-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Plastik" required>
+            <label for="edit-id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kode Sampah</label>
+            <input type="text" name="id" id="edit-id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
         </div>
         <div>
-            <label for="create-satuan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Satuan</label>
-            <input type="text" name="satuan" id="create-satuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Kg" required>
+            <label for="create-name" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Nama</label>
+            <input type="text" name="nama" id="create-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+            <span class="text-sm text-gray-600 pl-1">Contoh : Plastik</span>
         </div>
         <div>
-            <label for="create-harga" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Harga Satuan</label>
-            <input type="text" name="harga_satuan" id="create-harga" placeholder="20000" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+            <label for="create-satuan" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Satuan</label>
+            <input type="text" name="satuan" id="create-satuan" class="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+            <span class="text-sm text-gray-600 pl-1">Contoh : Kg</span>
+        </div>
+        <div>
+            <label for="create-harga" class="block mb-2 text-md font-medium text-gray-900 dark:text-white">Harga Satuan</label>
+            <input type="number" name="harga_satuan" id="create-harga" class="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+            <span class="text-sm text-gray-600 pl-1">Contoh : 2000</span>
         </div>
 
     </x-forms.input>
@@ -266,6 +319,9 @@
 
             nextPage(e){
                 const value = Number(e.target.getAttribute('value'))
+
+                console.log(this.curPage)
+                console.log(value)
 
                 if (this.curPage != value){
                     this.items = null;
@@ -417,10 +473,10 @@
             },
 
             selectItem(e){
-                const id = Number(e.target.getAttribute('id'))
-                let searchedItem = this.items.find(o => o.id === id);
+                const id = e.target.getAttribute('id')
+                let searchedItem = this.items.find(o => o.kode_sampah === id);
 
-                document.getElementById('edit-id').value = searchedItem.id
+                document.getElementById('edit-id').value = searchedItem.kode_sampah
                 document.getElementById('edit-nama').value = searchedItem.nama
                 document.getElementById('edit-satuan').value = searchedItem.satuan
                 document.getElementById('edit-harga').value = searchedItem.harga_satuan

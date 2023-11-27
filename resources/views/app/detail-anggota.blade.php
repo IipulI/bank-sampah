@@ -11,7 +11,7 @@
             <div class="bg-white rounded-md shadow-md mb-4">
                 <div class="flex justify-between px-4 py-4 text-2xl font-semibold text-gray-600">
                     <span>Jumlah Tabungan</span>
-                    <span>Rp. {{ $anggota->tabungan->jumlah_uang != null ? $anggota->tabungan->jumlah_uang : '0' }}</span>
+                    <span>Rp. {{ $anggota->tabungan != null ? $anggota->tabungan->jumlah_uang : '0' }}</span>
                 </div>
             </div>
 

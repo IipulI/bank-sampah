@@ -7,6 +7,7 @@ use App\Models\Sampah;
 use App\Models\Tabungan;
 use App\Models\Transaksi;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,69 @@ class SampahController extends Controller
             ->paginate(10);
 
         return $sampah;
+    }
+
+    public function submitData(Request $request){
+        $existData = Sampah::query()
+            ->where('nama', 'like', $request->input('nama'))
+            ->first();
+        if ($existData != null){
+            return redirect()->back()->with([
+                'type' => 'error',
+                'title' => 'Duplikasi data',
+                'message' => 'Tipe sampah dengan nama : ' . $request->input('nama') . ' Sudah ada, mohon ganti dengan nama lain'
+            ]);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $sampah = new Sampah();
+            $sampah->kode_sampah = $request->kode;
+            $sampah->nama = $request->input('nama');
+            $sampah->satuan = $request->input('satuan');
+            $sampah->harga_satuan = $request->input('harga_satuan');
+            $sampah->save();
+
+            DB::commit();
+        } catch (\Exception $e){
+            DB::rollBack();
+
+            return $e;
+        }
+
+        return redirect('tipe-sampah')->with([
+            'type' => 'success',
+            'title' => 'Berhasil dimasukan',
+            'message' => 'Data ' . $request->input('nama') .' Berhasil ditambahkan'
+        ]);
+    }
+
+    public function editData(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $sampah = Sampah::query()
+                ->where('kode_sampah', $request->input('id'))
+                ->firstOrFail();
+
+            $sampah->nama = $request->input('nama');
+            $sampah->satuan = $request->input('satuan');
+            $sampah->harga_satuan = $request->input('harga_satuan');
+            $sampah->save();
+
+            DB::commit();
+        } catch (\Exception $e){
+            DB::rollBack();
+
+            return $e;
+        }
+
+        return redirect('tipe-sampah')->with([
+            'type' => 'success',
+            'title' => 'Berhasil dimasukan',
+            'message' => 'Data ' . $sampah->nama .' Berhasil dirubah'
+        ]);
     }
 
     public function getSampah(Request $request){

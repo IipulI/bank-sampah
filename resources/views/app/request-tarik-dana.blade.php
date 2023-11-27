@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="flex flex-wrap items-center gap-x-2 my-2">
                                     <div class="w-48">
-                                        <label for="setelah-tarik" class="font-semibold text-gray-600">Tabungan setelah ditarik</label>
+                                        <label for="setelah-tarik" class="font-semibold text-gray-600">Tabungan Setelah Ditarik</label>
                                     </div>
                                     <input x-model="setelahTarik"
                                            name="setelahTarik" id="setelah-tarik" class="shadow-md rounded border px-2 py-1 border-gray-300 bg-gray-100" disabled>

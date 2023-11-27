@@ -18,6 +18,7 @@ class AnggotaConroller extends Controller
 
         $sampah = Masyarakat::query()
             ->with('user')
+            ->with('tabungan')
             ->when($search != null, function (Builder $query) use ($search) {
                 $query->where('nama', 'like', '%'.$search.'%')
                     ->orWhere('no_nik', 'like', '%'.$search.'%');

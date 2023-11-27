@@ -11,7 +11,7 @@
                 <div class="px-6 py-6 flex justify-between text-2xl w-full">
                     <div class="font-semibold text-gray-600">
                         @canany(['admin', 'staff'])
-                        Jumlah Kas Bank Sampah
+                        Tabungan Masyarakat yang Terismpan
                         @endcanany
                         @can('member')
                         Jumlah Tabungan
@@ -24,145 +24,118 @@
             </div>
 
             <div class="py-4 flex flex-wrap gap-y-4 gap-x-2">
-                @canany(['admin', 'staff'])
-                <div class="flex flex-col gap-y-4 flex-1 w-1/4">
-                    <div class="bg-white rounded-lg shadow-md ">
-                        <div class="px-4 py-4">
-                            <div class="font-semibold  text-xl text-gray-600 border-b-4 w-full">Jumlah Masyarakat</div>
-                            <div class="flex items-center justify-around mt-4">
-                                <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
-                                    <title>account-group</title>
-                                    <path d="M12,5.5A3.5,3.5 0 0,1 15.5,9A3.5,3.5 0 0,1 12,12.5A3.5,3.5 0 0,1 8.5,9A3.5,3.5 0 0,1 12,5.5M5,8C5.56,8 6.08,8.15 6.53,8.42C6.38,9.85 6.8,11.27 7.66,12.38C7.16,13.34 6.16,14 5,14A3,3 0 0,1 2,11A3,3 0 0,1 5,8M19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14C17.84,14 16.84,13.34 16.34,12.38C17.2,11.27 17.62,9.85 17.47,8.42C17.92,8.15 18.44,8 19,8M5.5,18.25C5.5,16.18 8.41,14.5 12,14.5C15.59,14.5 18.5,16.18 18.5,18.25V20H5.5V18.25M0,20V18.5C0,17.11 1.89,15.94 4.45,15.6C3.86,16.28 3.5,17.22 3.5,18.25V20H0M24,20H20.5V18.25C20.5,17.22 20.14,16.28 19.55,15.6C22.11,15.94 24,17.11 24,18.5V20Z" />
-                                </svg>
-
-                                <div class="font-semibold text-5xl text-gray-600">{{ $jumlah_anggota }}</div>
-                            </div>
+                <div style="align-self: flex-start" class="w-1/4 bg-white rounded-lg shadow-md">
+                    <div class="bg-lime-400 rounded-t-lg">
+                        @if(Auth::user()->role == 'member')
+                        <h1 class="text-center text-gray-700 font-semibold text-2xl py-4 px-4">{{ ucwords(strtolower(Auth::user()->name)) }}</h1>
+                        @else
+                        <div class="text-center text-gray-700 font-semibold text-2xl py-4 px-4">
+                            <p>Bank Sampah</p>
+                            <p>Griya Cibinong Indah</p>
                         </div>
+                        @endif
                     </div>
-                    <div class="bg-white rounded-lg shadow-md ">
-                        <div class="px-4 py-4">
-                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Tipe Sampah</div>
-                            <div class="flex items-center justify-around mt-4">
-                                <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
-                                    <title>account-group</title>
-                                    <path d="M5.12,5H18.87L17.93,4H5.93L5.12,5M20.54,5.23C20.83,5.57 21,6 21,6.5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V6.5C3,6 3.17,5.57 3.46,5.23L4.84,3.55C5.12,3.21 5.53,3 6,3H18C18.47,3 18.88,3.21 19.15,3.55L20.54,5.23M6,18H12V15H6V18Z"></path>
+                    @if(Auth::user()->role == 'member')
+                        <table class="block mx-4 my-4">
+                            <tr>
+                                <td class="max-w-[200px] text-left align-top pr-4">Alamat</td>
+                                <td class="max-w-[200px] align-top">:</td>
+                                <td class="max-w-[200px] px-2 max-w-sm break-words">{{ Auth::user()->anggota->alamat }}</td>
+                            </tr>
+                            <tr>
+                                <td class="max-w-[200px] text-left align-top pr-4">No NIK</td>
+                                <td class="max-w-[200px] align-top">:</td>
+                                <td class="max-w-[200px] px-2">{{ Auth::user()->anggota->no_nik }}</td>
+                            </tr>
+                            <tr>
+                                <td class="max-w-[200px] text-left align-top pr-4">Email</td>
+                                <td class="max-w-[200px] align-top">:</td>
+                                <td class="max-w-[200px] px-2">{{ Auth::user()->email }}</td>
+                            </tr>
+                            <tr>
+                                <td class="max-w-[200px] text-left align-top pr-4">Telepon</td>
+                                <td class="max-w-[200px] align-top">:</td>
+                                <td class="max-w-[200px] px-2">{{ Auth::user()->anggota->nomor_telepon }}</td>
+                            </tr>
+                        </table>
+                    @else
+                        <div class="flex justify-center mt-2 mb-6">
+                            <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="text-green-500 mx-2">
+                                    <path d="M21.82,15.42L19.32,19.75C18.83,20.61 17.92,21.06 17,21H15V23L12.5,18.5L15,14V16H17.82L15.6,12.15L19.93,9.65L21.73,12.77C22.25,13.54 22.32,14.57 21.82,15.42M9.21,3.06H14.21C15.19,3.06 16.04,3.63 16.45,4.45L17.45,6.19L19.18,5.19L16.54,9.6L11.39,9.69L13.12,8.69L11.71,6.24L9.5,10.09L5.16,7.59L6.96,4.47C7.37,3.64 8.22,3.06 9.21,3.06M5.05,19.76L2.55,15.43C2.06,14.58 2.13,13.56 2.64,12.79L3.64,11.06L1.91,10.06L7.05,10.14L9.7,14.56L7.97,13.56L6.56,16H11V21H7.4C6.47,21.07 5.55,20.61 5.05,19.76Z" />
                                 </svg>
-
-                                <div class="font-semibold text-5xl text-gray-600">{{ $jumlah_tipe_sampah }}</div>
-                            </div>
                         </div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-md ">
-                        <div class="px-4 py-4">
-                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Transaksi Masuk </div>
-                            <div class="flex items-center justify-around mt-4">
-                                <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
-                                    <title>receipt-in</title>
-                                    <path d="M19.5 3.5L18 2L16.5 3.5L15 2L13.5 3.5L12 2L10.5 3.5L9 2L7.5 3.5L6 2L4.5 3.5L3 2V22L4.5 20.5L6 22L7.5 20.5L9 22L10.5 20.5L12 22L13.26 20.74C13.09 20.18 13 19.59 13 19C13 18.32 13.12 17.64 13.34 17H6V15H14.53C15.67 13.73 17.29 13 19 13C19.68 13 20.36 13.12 21 13.34V2L19.5 3.5M18 13H6V11H18V13M18 9H6V7H18V9M18 18V16L15 19L18 22V20H22V18H18Z" />
-                                </svg>
-
-                                <div class="font-semibold text-5xl text-gray-600">{{ $jumlah_transaksi_masuk }}</div>
-                            </div>
-                        </div>
-                    </div>
+                        <table class="block mx-4 my-4">
+                            <tr>
+                                <td class="max-w-[200px] text-left align-top pr-4">Jumlah Masyarakat</td>
+                                <td class="max-w-[200px] align-top">:</td>
+                                <td class="max-w-[200px] px-2 max-w-sm break-words">{{$jumlah_anggota}}</td>
+                            </tr>
+                        </table>
+                    @endif
                 </div>
-                @endcanany
 
-                @canany(['admin', 'staff'])
-                <div class="flex flex-col flex-wrap gap-y-4 flex-1 w-1/4">
-                    <div class="bg-white rounded-lg shadow-md">
+                <div class="grow w-1/2">
+                    <div class="bg-white rounded-lg shadow-md mb-2">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Staff</div>
-                            <div class="flex items-center justify-around mt-4">
-                                <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
-                                    <title>shield-account</title>
-                                    <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z" />
-                                </svg>
-
-                                <div class="font-semibold text-5xl text-gray-600">{{ $jumlah_staff }}</div>
+                            <div class="font-semibold text-xl text-gray-600">Rekap Bulan Ini</div>
+                            <div class="flex ">
+                                <div class="text-gray-600 text-md w-1/2">Masuk Tabungan : {{$transaksi_masuk}}</div>
+                                <div class="text-gray-600 text-md w-1/2">Tarik Tabungan : {{$transaksi_keluar}}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white rounded-lg shadow-md">
+
+                    <div class="h-fit bg-white rounded-lg shadow-md mt-2">
                         <div class="px-4 py-4">
-                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Sampah Masuk</div>
-                            <div class="flex items-center justify-around mt-4">
-                                <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
-                                    <title>shield-account</title>
-                                    <path d="M20.54,5.23C20.83,5.57 21,6 21,6.5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V6.5C3,6 3.17,5.57 3.46,5.23L4.84,3.55C5.12,3.21 5.53,3 6,3H18C18.47,3 18.88,3.21 19.15,3.55L20.54,5.23M5.12,5H18.87L17.93,4H5.93L5.12,5M12,9.5L6.5,15H10V17H14V15H17.5L12,9.5Z"></path>
-                                </svg>
-
-                                <div class="font-semibold text-5xl text-gray-600">{{ $jumlah_sampah_masuk }}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-md">
-                        <div class="px-4 py-4">
-                            <div class="font-semibold text-xl text-gray-600 border-b-4 w-full">Jumlah Transaksi Keluar</div>
-                            <div class="flex items-center justify-around mt-4">
-                                <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="text-gray-600">
-                                    <title>shield-account</title>
-                                    <path d="M19.5 3.5L18 2L16.5 3.5L15 2L13.5 3.5L12 2L10.5 3.5L9 2L7.5 3.5L6 2L4.5 3.5L3 2V22L4.5 20.5L6 22L7.5 20.5L9 22L10.5 20.5L12 22L13.26 20.74C13.09 20.18 13 19.59 13 19C13 18.32 13.12 17.64 13.34 17H6V15H14.53C15.67 13.73 17.29 13 19 13C19.68 13 20.36 13.12 21 13.34V2L19.5 3.5M18 13H6V11H18V13M18 9H6V7H18V9M19 22V20H15V18H19V16L22 19L19 22Z" />
-                                </svg>
-
-
-                                <div class="font-semibold text-5xl text-gray-600">{{ $jumlah_transaksi_keluar }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endcanany
-
-                <div class="grow h-fit bg-white rounded-lg shadow-md w-1/2">
-                    <div class="px-4 py-4">
-                        <div class="font-semibold text-xl text-gray-600 border-b-4">Histori Transaksi</div>
-                        <div class="overflow-x-auto">
-                            <table class="px-4 text-sm w-full text-left text-gray-500 dark:text-gray-400">
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Kode Transaksi
-                                    </th>
-                                    @canany(['staff', 'admin'])
+                            <div class="font-semibold text-xl text-gray-600 border-b-4">Histori Transaksi</div>
+                            <div class="overflow-x-auto">
+                                <table class="px-4 text-sm w-full text-left text-gray-500 dark:text-gray-400">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                    <tr>
                                         <th scope="col" class="px-6 py-3">
-                                            Nama Masyarakat
+                                            Kode Transaksi
                                         </th>
-                                    @endcanany
-                                    <th scope="col" class="px-6 py-3">
-                                        Alur Transaksi
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Jumlah
-                                    </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($transaksi as $item)
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                        <td class="px-6 py-4">
-                                            {{ $item->kode_transaksi }}
-                                        </td>
                                         @canany(['staff', 'admin'])
-                                            <td class="px-6 py-4">
-                                                {{ $item->masyarakat->nama }}
-                                            </td>
+                                            <th scope="col" class="px-6 py-3">
+                                                Nama Masyarakat
+                                            </th>
                                         @endcanany
-                                        <td class="px-6 py-4">
-                                            Transaksi {{ $item->arus_transaksi }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            Rp. {{ $item->jumlah_uang }}
-                                        </td>
-                                        <td>
-                                            <a href="http://localhost:8080/histori-transaksi/detail?kode={{ $item->kode_transaksi }}" class="text-indigo-600 hover:underline">Detail</a>
-                                        </td>
+                                        <th scope="col" class="px-6 py-3">
+                                            Alur Transaksi
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Jumlah
+                                        </th>
+                                        <th>
+                                            Action
+                                        </th>
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($transaksi as $item)
+                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <td class="px-6 py-4">
+                                                {{ $item->kode_transaksi }}
+                                            </td>
+                                            @canany(['staff', 'admin'])
+                                                <td class="px-6 py-4">
+                                                    {{ $item->masyarakat->nama }}
+                                                </td>
+                                            @endcanany
+                                            <td class="px-6 py-4">
+                                                Transaksi {{ $item->arus_transaksi }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                Rp. {{ $item->jumlah_uang }}
+                                            </td>
+                                            <td>
+                                                <a href="http://localhost:8080/histori-transaksi/detail?kode={{ $item->kode_transaksi }}" class="text-indigo-600 hover:underline">Detail</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

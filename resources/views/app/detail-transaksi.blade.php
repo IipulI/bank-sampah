@@ -48,13 +48,13 @@
                 @if($transaksi->arus_transaksi === 'masuk')
                 <div class="grow bg-white rounded-lg shadow-md w-1/2 h-fit">
                     <div class="px-4 py-4">
-                        <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">List Barang</div>
+                        <div class="font-semibold text-2xl text-gray-600 border-b-4 w-full">List Tipe Sampah</div>
 
                         <table class="px-4 w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
-                                    Nama Barang
+                                    Tipe Sampah
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Timbangan

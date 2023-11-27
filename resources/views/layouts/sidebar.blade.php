@@ -3,11 +3,19 @@
         <ul class="space-y-2 font-medium">
             <li>
                 <x-sidebar-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    @if(Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
                         <path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
                     </svg>
 
                     <span class="ml-3">Dashboard</span>
+                    @else
+                    <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="bac nx rz um">
+                        <path d="M20 2C21.1 2 22 2.9 22 4V20C22 21.1 21.1 22 20 22H19V23H15V22H9V23H5V22H4C2.9 22 2 21.1 2 20V4C2 2.9 2.9 2 4 2H20M17 12C17 11 16.7 10 16.2 9.2L17.7 7.7L16.3 6.3L14.8 7.8C14 7.3 13 7 12 7C11 7 10 7.3 9.2 7.8L7.8 6.3L6.3 7.8L7.8 9.3C7.3 10 7 11 7 12C7 13 7.3 14 7.8 14.8L6.3 16.3L7.8 17.7L9.3 16.2C10 16.7 11 17 12 17C13 17 14 16.7 14.8 16.2L16.3 17.7L17.7 16.3L16.2 14.8C16.7 14 17 13 17 12M12 9C13.7 9 15 10.3 15 12C15 13.7 13.7 15 12 15C10.3 15 9 13.7 9 12C9 10.3 10.3 9 12 9M12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14Z" />
+                    </svg>
+
+                    <span class="ml-3">Tabungan</span>
+                    @endif
                 </x-sidebar-link>
             </li>
             @canany(['admin'])
@@ -32,7 +40,29 @@
                 </x-sidebar-link>
             </li>
             @endcanany
-            @canany(['admin'])
+            {{--            @canany(['admin', 'staff'])--}}
+            {{--                <li>--}}
+            {{--                    <x-sidebar-link :href="route('request-tarik-dana')" :active="request()->routeIs('request-tarik-dana')">--}}
+            {{--                        <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">--}}
+            {{--                            <path d="M17 3H7C4.79 3 3 4.79 3 7V17C3 19.21 4.79 21 7 21H19C20.11 21 21 20.11 21 19V9C21 7.9 20.11 7 19 7V5C19 3.9 18.11 3 17 3M17 5V7H7C6.27 7 5.59 7.2 5 7.54V7C5 5.9 5.9 5 7 5M15.5 15.5C14.67 15.5 14 14.83 14 14S14.67 12.5 15.5 12.5 17 13.17 17 14 16.33 15.5 15.5 15.5Z" />--}}
+            {{--                        </svg>--}}
+
+            {{--                        <span class="flex-1 ml-3 whitespace-nowrap">Tabungan Masyarakat</span>--}}
+            {{--                    </x-sidebar-link>--}}
+            {{--                </li>--}}
+            {{--            @endcanany--}}
+            @canany(['admin', 'staff'])
+                <li>
+                    <x-sidebar-link :href="route('request-tarik-dana')" :active="request()->routeIs('request-tarik-dana')">
+                        <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
+                            <path d="M3 8C2.45 8 2 7.55 2 7S2.45 6 3 6H5.54C5.19 6.6 5 7.29 5 8H3M5 13H2C1.45 13 1 12.55 1 12S1.45 11 2 11H5V13M1 18C.448 18 0 17.55 0 17S.448 16 1 16H5C5 16.71 5.19 17.4 5.54 18H1M21 6H9C7.89 6 7 6.89 7 8V16C7 17.11 7.89 18 9 18H21C22.11 18 23 17.11 23 16V8C23 6.89 22.11 6 21 6M21 12H9V9H21V12Z" />
+                        </svg>
+
+                        <span class="flex-1 ml-3 whitespace-nowrap">Request Tarik Tabungan</span>
+                    </x-sidebar-link>
+                </li>
+            @endcanany
+            @canany(['admin', 'staff'])
             <li>
                 <x-sidebar-link :href="route('tipe-sampah')" :active="request()->routeIs('tipe-sampah')">
                     <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"  aria-hidden="true" class="bac nx rz um">
@@ -51,17 +81,6 @@
                     </svg>
 
                     <span class="flex-1 ml-3 whitespace-nowrap">Setor Sampah</span>
-                </x-sidebar-link>
-            </li>
-            @endcanany
-            @canany(['admin', 'staff'])
-            <li>
-                <x-sidebar-link :href="route('request-tarik-dana')" :active="request()->routeIs('request-tarik-dana')">
-                    <svg width="25" height="25" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" class="bac nx rz um">
-                        <path d="M3 8C2.45 8 2 7.55 2 7S2.45 6 3 6H5.54C5.19 6.6 5 7.29 5 8H3M5 13H2C1.45 13 1 12.55 1 12S1.45 11 2 11H5V13M1 18C.448 18 0 17.55 0 17S.448 16 1 16H5C5 16.71 5.19 17.4 5.54 18H1M21 6H9C7.89 6 7 6.89 7 8V16C7 17.11 7.89 18 9 18H21C22.11 18 23 17.11 23 16V8C23 6.89 22.11 6 21 6M21 12H9V9H21V12Z" />
-                    </svg>
-
-                    <span class="flex-1 ml-3 whitespace-nowrap">Request Tarik Tabungan</span>
                 </x-sidebar-link>
             </li>
             @endcanany

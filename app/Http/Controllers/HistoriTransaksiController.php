@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Masyarakat;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,18 +11,28 @@ use Illuminate\Http\Request;
 class HistoriTransaksiController extends Controller
 {
     public function getData(Request $request){
+        $userId = $request->input('user_id');
         $search = $request->input('search');
         $dateStart = $request->input('date-start');
         $dateEnd = $request->input('date-end');
         $filter = $request->input('type');
 
+        $masyarakat = null;
+        if ($userId != null){
+            $masyarakat = Masyarakat::query()
+                ->where('user_id', $userId)->firstOrFail();
+        }
+
         $transaksi = Transaksi::query()
             ->with('masyarakat')
             ->with('staff')
 //            ->has('tipeSampah')
+            ->when($userId != null, function (Builder $query) use($masyarakat){
+                $query->where('no_nik', $masyarakat->no_nik);
+            })
             ->when($search != null, function (Builder $query) use ($search) {
                 $query->where('kode_transaksi', 'like', '%'.$search.'%');
-                $query->orWhereHas('anggota', function (Builder $query) use($search){
+                $query->orWhereHas('masyarakat', function (Builder $query) use($search){
                     $query->where('nama', 'like', '%'.$search.'%');
                 });
             })
@@ -40,6 +51,7 @@ class HistoriTransaksiController extends Controller
 //            ->has('tipeSampah')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
 
         return $transaksi;
     }

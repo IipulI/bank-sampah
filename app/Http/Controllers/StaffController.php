@@ -51,7 +51,7 @@ class StaffController extends Controller
             ]);
 
             Staff::create([
-                'user_id' => $anggota->id,
+                'user_id' => $anggota->user_id,
                 'nama' => $request->input('nama'),
                 'role' => 'staff'
             ]);
